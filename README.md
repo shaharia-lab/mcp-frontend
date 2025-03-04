@@ -27,30 +27,41 @@ Experience MCP Kit in action - chat with LLMs while leveraging additional capabi
 
 ## 📦 Installation
 
-1. Clone the repository:
+### Standard Installation
 
+1. Clone the repository:
 ```shell
 git clone https://github.com/shaharia-lab/mcp-frontend.git
 cd mcp-frontend
 ```
 
-2. Install dependencies:
+[Rest of standard installation steps...]
+
+### 🐳 Docker Installation
+
+You can run MCP Frontend using our official Docker image:
 
 ```shell
-npm install
+docker pull ghcr.io/shaharia-lab/mcp-frontend:<version>
 ```
 
-3. Set up environment variables:
+Replace `<version>` with the specific version you want to use (e.g., `latest`, `1.0.0`).
+
+#### Running with Docker
 
 ```shell
-cp .env.example .env
+docker run -p 3000:3000 -e VITE_BACKEND_API_ENDPOINT=http://localhost:8081 ghcr.io/shaharia-lab/mcp-frontend:<version>
 ```
 
-4. Configure your environment:
+#### Environment Variables
+
+The following environment variables are required to run MCP Frontend:
 
 | env_key                     | Default                 | Required | Description                           |
 |-----------------------------|-------------------------|----------|---------------------------------------|
 | `VITE_BACKEND_API_ENDPOINT` | `http://localhost:8081` | Yes      | The base URL for the MCP backend API. |
+
+Simply copy the `.env.example` file to `.env` and update the values as needed.
 
 ## 🚀 Usage
 
