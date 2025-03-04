@@ -26,3 +26,15 @@ export const fetchLLMProviders = async () => {
         throw error;
     }
 };
+
+export const fetchTools = async () => {
+    try {
+        const response = await fetch('http://localhost:8081/api/tools');
+        if (!response.ok) {
+            throw new Error('Failed to fetch tools');
+        }
+        return await response.json();
+    } catch (error) {
+        throw error;
+    }
+};
