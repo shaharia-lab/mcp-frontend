@@ -6,8 +6,8 @@ sed_script="/tmp/sed_script.sed"
 # Ensure the sed script file is cleaned up on exit
 trap 'rm -f "$sed_script"' EXIT
 
-# Extract MCP_ environment variables and build the sed expression
-env | grep '^MCP_' | while IFS='=' read -r key value; do
+# Extract VITE_MCP_ environment variables and build the sed expression
+env | grep '^VITE_MCP_' | while IFS='=' read -r key value; do
    # Escape slashes and other special characters in key and value
    escaped_key=$(printf '%s' "$key" | sed 's/[\/&]/\\&/g')
    escaped_value=$(printf '%s' "$value" | sed 's/[\/&]/\\&/g')
@@ -17,7 +17,7 @@ done
 
 # Check if the sed script file was created and is not empty
 if [ ! -s "$sed_script" ]; then
-   echo "No MCP_ environment variables found. Exiting with error."
+   echo "No VITE_MCP_ environment variables found. Exiting with error."
    exit 1
 fi
 

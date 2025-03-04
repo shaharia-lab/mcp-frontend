@@ -1,6 +1,6 @@
 export const fetchChatHistories = async (token: string) => {
     try {
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_API_ENDPOINT}/chats`, {
+        const response = await fetch(`${import.meta.env.VITE_MCP_BACKEND_API_ENDPOINT}/chats`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'

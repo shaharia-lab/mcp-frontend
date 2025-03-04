@@ -51,7 +51,7 @@ Replace `<version>` with the specific version you want to use (e.g., `latest`, `
 
 docker run \
     -p 3000:3000 \
-    -e MCP_BACKEND_API_ENDPOINT=http://localhost:8081 \
+    -e VITE_MCP_BACKEND_API_ENDPOINT=http://localhost:8081 \
     ghcr.io/shaharia-lab/mcp-frontend:<version>
 
 #### Environment Variables
@@ -60,9 +60,9 @@ The following environment variables are required to run MCP Frontend:
 
 ##### Production Environment Variables (Running with Docker)
 
-| env_key                    | Default                 | Required | Description                           |
-|----------------------------|-------------------------|----------|---------------------------------------|
-| `MCP_BACKEND_API_ENDPOINT` | `http://localhost:8081` | Yes      | The base URL for the MCP backend API. |
+| env_key                         | Default | Required | Description                           |
+|---------------------------------|---------|----------|---------------------------------------|
+| `VITE_MCP_BACKEND_API_ENDPOINT` | -       | Yes      | The base URL for the MCP backend API. |
 
 Simply copy the `.env.example` file to `.env` and update the values as needed.
 
