@@ -6,7 +6,7 @@ import 'highlight.js/styles/github-dark.css';
 import {Sidebar} from './components/Sidebar';
 import {ModelControls} from './components/ModelControls';
 import {ChatContainer} from './components/ChatContainer';
-import {WelcomeScreen} from './components/WelcomeScreen';
+import {WelcomeScreen} from './components/WelcomeScreen/WelcomeScreen.tsx';
 import {Cog6ToothIcon} from "@heroicons/react/24/outline";
 import {NotificationProvider} from './context/NotificationContext';
 import {NotificationContainer} from "./components/NotificationContainer.tsx";
