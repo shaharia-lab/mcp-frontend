@@ -1,7 +1,7 @@
 // components/LLMProviderToggle.tsx
-import React, { useState } from 'react';
-import { CircleStackIcon } from "@heroicons/react/24/outline";
-import { LLMProvidersModal } from './LLMProvidersModal';
+import React, {useState} from 'react';
+import {CircleStackIcon} from "@heroicons/react/24/outline";
+import {LLMProvidersModal} from './LLMProvidersModal';
 
 interface LLMProviderToggleProps {
     selectedProvider: string | null;

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { WrenchScrewdriverIcon } from "@heroicons/react/16/solid";
+import React, {useState} from 'react';
+import {WrenchScrewdriverIcon} from "@heroicons/react/16/solid";
 import {ToolsModal} from "./ToolsModal.tsx";
 
 interface ToolsToggleButtonProps {

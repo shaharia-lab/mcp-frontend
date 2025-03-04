@@ -1,11 +1,8 @@
 import React from 'react';
-import {
-    ArrowPathIcon,
-    Cog6ToothIcon,
-} from "@heroicons/react/24/outline";
+import {ArrowPathIcon, Cog6ToothIcon,} from "@heroicons/react/24/outline";
 import {FaGithub} from "react-icons/fa";
 import {ArrowLeftOnRectangleIcon} from "@heroicons/react/20/solid";
-import { useAuth0 } from '@auth0/auth0-react';
+import {useAuth0} from '@auth0/auth0-react';
 
 interface SidebarFooterProps {
     onRefresh?: () => void;

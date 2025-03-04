@@ -1,5 +1,5 @@
 // src/utils/contentParser.ts
-import { marked } from 'marked';
+import {marked} from 'marked';
 
 export class ContentParser {
     static async parse(content: string): Promise<string> {

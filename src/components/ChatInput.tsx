@@ -1,5 +1,5 @@
-import React, { useState, KeyboardEvent } from 'react';
-import { ToolsToggle } from './ChatInputButton/ToolsToggle.tsx';
+import React, {KeyboardEvent, useState} from 'react';
+import {ToolsToggle} from './ChatInputButton/ToolsToggle.tsx';
 import {LLMProviderToggle} from "./LLMProviderToggle.tsx";
 
 interface ChatInputProps {

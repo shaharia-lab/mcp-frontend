@@ -1,5 +1,5 @@
 import React from 'react';
-import { CopyButton } from './CopyButton';
+import {CopyButton} from './CopyButton';
 
 interface HeaderProps {
     isUser: boolean;

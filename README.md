@@ -58,13 +58,12 @@ docker run \
 
 The following environment variables are required to run MCP Frontend:
 
-##### Production Environment Variables (Running with Docker)
-
 | env_key                         | Default | Required | Description                           |
 |---------------------------------|---------|----------|---------------------------------------|
 | `VITE_MCP_BACKEND_API_ENDPOINT` | -       | Yes      | The base URL for the MCP backend API. |
 
-Simply copy the `.env.example` file to `.env` and update the values as needed.
+Simply copy the `.env.example` file to `.env` and update the values as needed to run the application locally.
+And for Docker, you can pass the environment variables using the `-e` flag.
 
 ## 🚀 Usage
 

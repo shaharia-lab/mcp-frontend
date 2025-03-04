@@ -1,4 +1,3 @@
-// types/llm.ts
 export interface Model {
     name: string;
     description: string;
@@ -16,4 +15,8 @@ export interface LLMProvidersModalProps {
     onSave: (provider: string, modelId: string) => void;
     initialProvider: string | null | undefined;
     initialModelId: string | null | undefined;
+}
+
+export interface LLMProvidersResponse {
+    providers: Provider[];
 }

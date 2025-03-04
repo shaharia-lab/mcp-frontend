@@ -1,21 +1,16 @@
-import React, {useState, useRef, useEffect} from 'react';
-import {chatService} from "../services/chatService.ts";
+import React, {useEffect, useRef, useState} from 'react';
 import {Message} from "./Message/Message.tsx";
 import {ChatInput} from "./ChatInput.tsx";
-import { ChatPayload } from '../types/chat';
+import {ChatPayload} from '../types/chat';
 import {useNotification} from "../context/NotificationContext.tsx";
-import { useAuth0 } from '@auth0/auth0-react';
+import {useAuth0} from '@auth0/auth0-react';
+import {ApiChatMessage, ChatService, ClientChatMessage} from "../services/ChatService.ts";
 
 interface ModelSettings {
     temperature: number;
     maxTokens: number;
     topP: number;
     topK: number;
-}
-
-interface ChatMessage {
-    content: string;
-    isUser: boolean;
 }
 
 interface ChatContainerProps {
@@ -30,7 +25,7 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
                                                                 selectedChatId
                                                             }) => {
     const { addNotification } = useNotification();
-    const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const [messages, setMessages] = useState<ClientChatMessage[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const [chatUuid, setChatUuid] = useState<string | null>(null);
@@ -38,27 +33,12 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
     const [selectedProvider, setSelectedProvider] = useState<string | null>(null);
     const [selectedModelId, setSelectedModelId] = useState<string | null>(null);
     const { isAuthenticated, loginWithRedirect } = useAuth0();
-    if (!isAuthenticated) {
-        return (
-            <div className="flex flex-col items-center justify-center h-full">
-                <h2 className="text-xl mb-4">Please log in to use the chat</h2>
-                <button
-                    onClick={() => loginWithRedirect()}
-                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
-                >
-                    Log In
-                </button>
-            </div>
-        );
-    }
-
+    const { getAccessTokenSilently } = useAuth0();
 
     const handleProviderChange = (provider: string, modelId: string) => {
         setSelectedProvider(provider);
         setSelectedModelId(modelId);
     };
-
-
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -77,26 +57,51 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
             }
 
             try {
-                const data = await chatService.loadChatHistory(selectedChatId);
-                const formattedMessages = data.messages.map((msg: any) => ({
-                    content: msg.Text,
-                    isUser: msg.IsUser
-                }));
+                const token = await getAccessTokenSilently();
+                const chatService = new ChatService(token);
+                const response = await chatService.loadChatHistory(selectedChatId);
 
-                setMessages(formattedMessages);
-                setChatUuid(selectedChatId);
+                if (response.error) {
+                    console.error('Error loading chat history:', response.error);
+                    return;
+                }
+
+                if (response.data) {
+                    const formattedMessages = response.data.messages.map((msg: ApiChatMessage): ClientChatMessage => ({
+                        content: msg.Text,
+                        isUser: msg.IsUser
+                    }));
+
+                    setMessages(formattedMessages);
+                    setChatUuid(selectedChatId);
+                }
             } catch (error) {
                 console.error('Error loading chat history:', error);
             }
         };
 
         loadChatHistory();
-    }, [selectedChatId]);
+    }, [selectedChatId, getAccessTokenSilently]);
+
+
+    if (!isAuthenticated) {
+        return (
+            <div className="flex flex-col items-center justify-center h-full">
+                <h2 className="text-xl mb-4">Please log in to use the chat</h2>
+                <button
+                    onClick={() => loginWithRedirect()}
+                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                >
+                    Log In
+                </button>
+            </div>
+        );
+    }
 
     const handleMessageSubmit = async (message: string) => {
         setIsLoading(true);
 
-        const newMessage: ChatMessage = {
+        const newMessage: ClientChatMessage = {
             content: message,
             isUser: true
         };
@@ -104,6 +109,9 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
         setMessages(prev => [...prev, newMessage]);
 
         try {
+            const token = await getAccessTokenSilently();
+            const chatService = new ChatService(token);
+
             const payload: ChatPayload = {
                 question: message,
                 selectedTools,
@@ -119,11 +127,11 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
 
             const data = await chatService.sendMessage(payload);
 
-            if (data.chat_uuid && !chatUuid) {
-                setChatUuid(data.chat_uuid);
+            if (data.data.chat_uuid && !chatUuid) {
+                setChatUuid(data.data.chat_uuid);
             }
 
-            setMessages(prev => [...prev, { content: data.answer, isUser: false }]);
+            setMessages(prev => [...prev, { content: data.data.answer, isUser: false }]);
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : "Sorry, there was an error processing your request.";
             addNotification('error', errorMessage);

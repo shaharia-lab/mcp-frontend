@@ -1,6 +1,6 @@
 // components/message/MessageContent.tsx
-import React, { useEffect, useState } from 'react';
-import { ContentParser } from "../../utils/contentParser";
+import React, {useEffect, useState} from 'react';
+import {ContentParser} from "../../utils/contentParser";
 
 interface MessageContentProps {
     content: string;
