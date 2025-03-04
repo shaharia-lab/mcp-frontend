@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { WelcomeScreen } from '../WelcomeScreen';
+import { WelcomeScreen } from './WelcomeScreen';
 
 describe('WelcomeScreen', () => {
     it('renders welcome message', () => {

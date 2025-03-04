@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { ToolsToggle } from "../../ChatInputButton/ToolsToggle.tsx";
+import {ToolsToggle} from "./ToolsToggle.tsx";
 
 // Define the interface for ToolsModal props
 interface MockToolsModalProps {
@@ -11,7 +11,7 @@ interface MockToolsModalProps {
 }
 
 // Mock the ToolsModal component with proper typing
-jest.mock('../../ChatInputButton/ToolsModal', () => ({
+jest.mock('./ToolsModal', () => ({
     ToolsModal: ({ isOpen, onClose, onSave, initialSelectedTools }: MockToolsModalProps) =>
         isOpen ? (
             <div data-testid="tools-modal">

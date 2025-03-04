@@ -1,11 +1,11 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import {ToolsModal} from "../../ChatInputButton/ToolsModal.tsx";
-import {fetchTools} from "../../../api";
+import {fetchTools} from "../../api";
 import {act} from "react";
+import {ToolsModal} from "./ToolsModal.tsx";
 
 // Mock the entire api module
-jest.mock('../../../api', () => ({
+jest.mock('../../api', () => ({
     fetchTools: jest.fn()
 }));
 
@@ -15,7 +15,7 @@ jest.mock('@heroicons/react/24/outline', () => ({
 }));
 
 // Mock SearchBar component
-jest.mock('../../SearchBar.tsx', () => ({
+jest.mock('../SearchBar.tsx', () => ({
     SearchBar: ({ value, onChange }: { value: string; onChange: (value: string) => void }) => (
         <input
             data-testid="search-bar"
@@ -27,7 +27,7 @@ jest.mock('../../SearchBar.tsx', () => ({
 }));
 
 // Mock ToolItem component
-jest.mock('../../ToolItem', () => ({
+jest.mock('../ToolItem', () => ({
     ToolItem: ({ tool, isSelected, onToggle }: { tool: any; isSelected: boolean; onToggle: (name: string) => void }) => (
         <div
             data-testid={`tool-item-${tool.name}`}
