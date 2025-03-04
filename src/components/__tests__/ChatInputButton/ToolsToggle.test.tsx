@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { ToolsToggle } from "../ChatInputButton/ToolsToggle.tsx";
+import { ToolsToggle } from "../../ChatInputButton/ToolsToggle.tsx";
 
 // Define the interface for ToolsModal props
 interface MockToolsModalProps {
