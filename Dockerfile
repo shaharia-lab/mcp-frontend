@@ -1,33 +1,15 @@
-# Build stage
+# Stage 1: Build Image
 FROM node:20-alpine as build
-
+RUN apk add git
 WORKDIR /app
-
-# Copy package files
-COPY package.json package-lock.json ./
-
-# Install dependencies
-RUN npm ci
-
-# Copy all other source files
+COPY package*.json ./
+RUN npm install
 COPY . .
-
-# Build the application
 RUN npm run build
 
-# Production stage
-FROM node:20-alpine
-
-WORKDIR /app
-
-# Install serve globally
-RUN npm install -g serve
-
-# Copy the built assets from build stage
-COPY --from=build /app/dist .
-
-# Expose port 3000 (serve's default port)
-EXPOSE 3000
-
-# Start serve
-CMD ["serve", "-s", ".", "-l", "3000"]
+# Stage 2, use the compiled app, ready for production with Nginx
+FROM nginx:1.21.6-alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+COPY /nginx-custom.conf /etc/nginx/conf.d/default.conf
+COPY env.sh /docker-entrypoint.d/env.sh
+RUN chmod +x /docker-entrypoint.d/env.sh
