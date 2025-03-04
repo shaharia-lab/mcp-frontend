@@ -74,7 +74,7 @@ For detailed configuration options, refer to the [Vite documentation](https://vi
 ## 🏗️ Architecture
 
 MCP Frontend is built with:
-- [Vite](https://vitejs.dev/) - Build tool and development server
+- [Vite](https://vite.dev/) - Build tool and development server
 - [React](https://reactjs.org/) - UI framework
 - [TypeScript](https://www.typescriptlang.org/) - Type-safe JavaScript
 - [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
