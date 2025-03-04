@@ -11,7 +11,7 @@ interface MockToolsModalProps {
 }
 
 // Mock the ToolsModal component with proper typing
-jest.mock('../ChatInputButton/ToolsModal', () => ({
+jest.mock('../../ChatInputButton/ToolsModal', () => ({
     ToolsModal: ({ isOpen, onClose, onSave, initialSelectedTools }: MockToolsModalProps) =>
         isOpen ? (
             <div data-testid="tools-modal">
