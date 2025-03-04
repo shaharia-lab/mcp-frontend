@@ -2,8 +2,8 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {XMarkIcon} from "@heroicons/react/24/outline";
 import {Tool, ToolsModalProps} from "../../types/tools.ts";
 import {SearchBar} from "../SearchBar.tsx";
-import {ToolItem} from "../ToolItem.tsx";
 import {fetchTools} from "../../api";
+import {ToolItem} from "../ToolItem/ToolItem.tsx";
 
 export const ToolsModal: React.FC<ToolsModalProps> = ({
                                                           isOpen,

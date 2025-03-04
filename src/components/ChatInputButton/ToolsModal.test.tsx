@@ -27,7 +27,7 @@ jest.mock('../SearchBar.tsx', () => ({
 }));
 
 // Mock ToolItem component
-jest.mock('../ToolItem', () => ({
+jest.mock('../ToolItem/ToolItem', () => ({
     ToolItem: ({ tool, isSelected, onToggle }: { tool: any; isSelected: boolean; onToggle: (name: string) => void }) => (
         <div
             data-testid={`tool-item-${tool.name}`}

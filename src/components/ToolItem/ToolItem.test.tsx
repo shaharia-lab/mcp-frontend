@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import {ToolItem} from "./ToolItem.tsx";
-import {Tool} from "../types/tools.ts";
+import {Tool} from "../../types/tools.ts";
 
 describe('ToolItem', () => {
     const mockTool: Tool = {
