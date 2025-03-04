@@ -6,6 +6,10 @@ export interface Message {
 
 export interface ChatHistory {
     uuid: string;
-    messages: Message[];
+    messages: Array<{
+        Role: string;
+        Text: string;
+        generated_at: string;
+    }>;
     created_at: string;
 }

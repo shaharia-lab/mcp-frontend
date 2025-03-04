@@ -15,7 +15,7 @@ interface ChatHistoryListProps {
 export const ChatHistoryList: React.FC<ChatHistoryListProps> = ({
                                                                     isLoading,
                                                                     error,
-                                                                    chatHistories,
+                                                                    chatHistories = [],
                                                                     selectedChatId,
                                                                     onChatSelect,
                                                                     getFirstMessage,

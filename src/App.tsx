@@ -10,6 +10,7 @@ import { WelcomeScreen } from './components/WelcomeScreen';
 import { Cog6ToothIcon } from "@heroicons/react/24/outline";
 import { NotificationProvider } from './context/NotificationContext';
 import {NotificationContainer} from "./components/NotificationContainer.tsx";
+import { Auth0Provider } from '@auth0/auth0-react';
 
 interface ModelSettings {
     temperature: number;
@@ -110,6 +111,15 @@ function App() {
     };
 
     return (
+        <Auth0Provider
+            domain="shaharia-lab-beta.eu.auth0.com"
+            clientId="TMpTLSNJEcOSISWvHmEW7GJS6mawcXQR"
+            authorizationParams={{
+                redirect_uri: window.location.origin,
+                audience: 'mcp-kit-backend',
+            }}
+        >
+
         <NotificationProvider>
         <div className="bg-gray-50 min-h-screen">
             <div
@@ -181,6 +191,7 @@ function App() {
             <NotificationContainer />
         </div>
         </NotificationProvider>
+        </Auth0Provider>
     );
 }
 

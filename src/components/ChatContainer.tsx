@@ -4,6 +4,7 @@ import {Message} from "./Message/Message.tsx";
 import {ChatInput} from "./ChatInput.tsx";
 import { ChatPayload } from '../types/chat';
 import {useNotification} from "../context/NotificationContext.tsx";
+import { useAuth0 } from '@auth0/auth0-react';
 
 interface ModelSettings {
     temperature: number;
@@ -36,6 +37,21 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
     const [selectedTools, setSelectedTools] = useState<string[]>([]);
     const [selectedProvider, setSelectedProvider] = useState<string | null>(null);
     const [selectedModelId, setSelectedModelId] = useState<string | null>(null);
+    const { isAuthenticated, loginWithRedirect } = useAuth0();
+    if (!isAuthenticated) {
+        return (
+            <div className="flex flex-col items-center justify-center h-full">
+                <h2 className="text-xl mb-4">Please log in to use the chat</h2>
+                <button
+                    onClick={() => loginWithRedirect()}
+                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                >
+                    Log In
+                </button>
+            </div>
+        );
+    }
+
 
     const handleProviderChange = (provider: string, modelId: string) => {
         setSelectedProvider(provider);
