@@ -1,4 +1,3 @@
-// components/ToolsModal.tsx
 import React, {useEffect, useMemo, useState} from 'react';
 import {XMarkIcon} from "@heroicons/react/24/outline";
 import {Tool, ToolsModalProps} from "../../types/tools.ts";
