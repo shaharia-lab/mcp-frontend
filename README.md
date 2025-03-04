@@ -1,54 +1,120 @@
 # MCP (Model Context Protocol) Frontend
 
-This repository is part of [mcp-kit](https://github.com/shaharia-lab/mcp-kit).
-It is the frontend part of the MCP (Model Context Protocol) Kit written in Golang. 
-This frontend is a single page application built with Vite, React, Typescript.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-# Demo
+A frontend application for the Model Context Protocol (MCP) Kit that enables enhanced interactions with Large Language Models through tool-based capabilities.
 
-Let's chat with LLM by providing additional capabilities (tools) coming from MCP server.
+This repository is part of [mcp-kit](https://github.com/shaharia-lab/mcp-kit) and serves as the user interface layer built with modern web technologies.
+
+## 🚀 Features
+
+- Single Page Application architecture
+- Real-time chat interface with LLMs
+- Tool-based interaction capabilities
+- Integration with MCP backend server
+- Modern, responsive UI built with React and TypeScript
+
+## 🎥 Demo
+
+Experience MCP Kit in action - chat with LLMs while leveraging additional capabilities provided by the MCP server:
 
 <video src="https://github.com/user-attachments/assets/81804a29-e896-4f65-a929-05ac6a6aa92a" controls title="MCP Kit in action"></video>
 
-## Installation
-
-### Prerequisites
+## 🛠️ Prerequisites
 
 - Node.js 20.x
 - NPM 7.x
 
-### Setup Environment Variables
+## 📦 Installation
+
+1. Clone the repository:
+
+```shell
+git clone https://github.com/shaharia-lab/mcp-frontend.git
+cd mcp-frontend
+```
+
+2. Install dependencies:
+
+```shell
+npm install
+```
+
+3. Set up environment variables:
 
 ```shell
 cp .env.example .env
 ```
 
-Update the `.env` file with your own values.
+4. Configure your environment:
 
 | env_key                     | Default                 | Required | Description                           |
 |-----------------------------|-------------------------|----------|---------------------------------------|
 | `VITE_BACKEND_API_ENDPOINT` | `http://localhost:8081` | Yes      | The base URL for the MCP backend API. |
 
+## 🚀 Usage
 
-### Run the frontend
+### Development
 
+Run the development server:
 ```shell
-npm install
 npm run dev
 ```
 
-To build the frontend for production, run:
+### Production
+
+Build for production:
 
 ```shell
 npm run build
 ```
 
-For more details, please check the [Vite documentation](https://vite.dev/guide/).
+For detailed configuration options, refer to the [Vite documentation](https://vite.dev/guide/).
 
-## MCP-Kit Backend
+## 🏗️ Architecture
 
-Feel free to check out the main backend [here](https://github.com/shaharia-lab/mcp-kit).
+MCP Frontend is built with:
+- [Vite](https://vitejs.dev/) - Build tool and development server
+- [React](https://reactjs.org/) - UI framework
+- [TypeScript](https://www.typescriptlang.org/) - Type-safe JavaScript
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
 
-## Disclaimer
+## 🤝 Contributing
 
-We are actively improving this frontend. Not recommended for production-use yet.
+We welcome contributions! Here's how you can help:
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+Please ensure your PRs follow our coding standards and include appropriate tests.
+
+## 🔍 Related Projects
+
+- [MCP-Kit Backend](https://github.com/shaharia-lab/mcp-kit) - The main backend server
+- [Documentation](https://github.com/shaharia-lab/mcp-kit) - Full project documentation
+
+## ⚠️ Current Status
+
+This project is under active development. While functional, it's not yet recommended for production use. We're working on:
+- Enhanced error handling
+- Improved performance
+- Additional tool integrations
+- Comprehensive testing suite
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🤔 Support
+
+- 📧 Email: [hello@shaharialab.com](mailto:hello@shaharialab.com)
+- 🐛 [Issue Tracker](https://github.com/shaharia-lab/mcp-frontend/issues)
+- 💬 [Discord invite: Community Chat](https://discord.gg/XMDMQ2u7)
+
+## 🙏 Acknowledgments
+
+- The MCP Kit community
+- All our contributors and supporters
