@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Provider, LLMProvidersModalProps } from '../types/llm';
 import { LLMProviderCard } from './LLMProviderCard';
+import {fetchLLMProviders} from "../api";
 
 export const LLMProvidersModal: React.FC<LLMProvidersModalProps> = ({
                                                                         isOpen,
@@ -21,8 +22,7 @@ export const LLMProvidersModal: React.FC<LLMProvidersModalProps> = ({
             setIsLoading(true);
             setError(null);
             try {
-                const response = await fetch('http://localhost:8081/llm-providers');
-                const data = await response.json();
+                const data = await fetchLLMProviders();
                 setProviders(data.providers);
             } catch (err) {
                 setError('Failed to load LLM providers');
