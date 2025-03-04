@@ -1,5 +1,5 @@
-import { ChatHistory } from "../types";
-import { APIClient, APIResponse } from "./APIClient.ts";
+import {ChatHistory} from "../types";
+import {APIClient, APIResponse} from "./APIClient.ts";
 import {ChatPayload} from "../types/chat.ts";
 
 export interface ChatResponse {

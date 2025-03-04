@@ -1,5 +1,5 @@
 import React from 'react';
-import { Provider } from '../types/llm';
+import {Provider} from '../types/llm';
 
 interface LLMProviderCardProps {
     provider: Provider;

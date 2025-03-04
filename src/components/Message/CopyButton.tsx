@@ -1,6 +1,6 @@
 // components/CopyButton.tsx
-import React, { useState } from 'react';
-import { ClipboardDocumentIcon } from "@heroicons/react/16/solid";
+import React, {useState} from 'react';
+import {ClipboardDocumentIcon} from "@heroicons/react/16/solid";
 import {CopyService} from "../../utils/copyService.ts";
 
 interface CopyButtonProps {

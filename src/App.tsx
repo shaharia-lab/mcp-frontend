@@ -1,16 +1,16 @@
-import { useState, useEffect } from 'react';
-import { marked } from 'marked';
+import {useEffect, useState} from 'react';
+import {marked} from 'marked';
 import DOMPurify from 'dompurify';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github-dark.css';
-import { Sidebar } from './components/Sidebar';
-import { ModelControls } from './components/ModelControls';
-import { ChatContainer } from './components/ChatContainer';
-import { WelcomeScreen } from './components/WelcomeScreen';
-import { Cog6ToothIcon } from "@heroicons/react/24/outline";
-import { NotificationProvider } from './context/NotificationContext';
+import {Sidebar} from './components/Sidebar';
+import {ModelControls} from './components/ModelControls';
+import {ChatContainer} from './components/ChatContainer';
+import {WelcomeScreen} from './components/WelcomeScreen';
+import {Cog6ToothIcon} from "@heroicons/react/24/outline";
+import {NotificationProvider} from './context/NotificationContext';
 import {NotificationContainer} from "./components/NotificationContainer.tsx";
-import { Auth0Provider } from '@auth0/auth0-react';
+import {Auth0Provider} from '@auth0/auth0-react';
 
 interface ModelSettings {
     temperature: number;

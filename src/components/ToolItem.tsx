@@ -1,6 +1,6 @@
 // components/ToolItem.tsx
 import React from 'react';
-import { Tool } from '../types/tools';
+import {Tool} from '../types/tools';
 
 interface ToolItemProps {
     tool: Tool;

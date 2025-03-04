@@ -1,9 +1,9 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Message} from "./Message/Message.tsx";
 import {ChatInput} from "./ChatInput.tsx";
-import { ChatPayload } from '../types/chat';
+import {ChatPayload} from '../types/chat';
 import {useNotification} from "../context/NotificationContext.tsx";
-import { useAuth0 } from '@auth0/auth0-react';
+import {useAuth0} from '@auth0/auth0-react';
 import {ApiChatMessage, ChatService, ClientChatMessage} from "../services/ChatService.ts";
 
 interface ModelSettings {

@@ -1,7 +1,7 @@
 // src/components/NotificationContainer.tsx
 import React from 'react';
-import { NotificationToast } from './NotificationToast';
-import { useNotification } from '../context/NotificationContext';
+import {NotificationToast} from './NotificationToast';
+import {useNotification} from '../context/NotificationContext';
 
 export const NotificationContainer: React.FC = () => {
     const { notifications, removeNotification } = useNotification();

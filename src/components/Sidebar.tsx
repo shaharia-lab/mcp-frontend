@@ -1,12 +1,12 @@
 // components/Sidebar.tsx
-import React, { useEffect, useState } from 'react';
-import { ChatHistory } from "../types";
-import { fetchChatHistories } from "../api";
-import { SidebarHeader } from "./sidebar/SidebarHeader";
-import { NewChatSection } from "./sidebar/NewChatSection";
-import { ChatHistoryList } from "./sidebar/ChatHistoryList";
-import { SidebarFooter } from "./sidebar/SidebarFooter";
-import { useAuth0 } from '@auth0/auth0-react';
+import React, {useEffect, useState} from 'react';
+import {ChatHistory} from "../types";
+import {fetchChatHistories} from "../api";
+import {SidebarHeader} from "./sidebar/SidebarHeader";
+import {NewChatSection} from "./sidebar/NewChatSection";
+import {ChatHistoryList} from "./sidebar/ChatHistoryList";
+import {SidebarFooter} from "./sidebar/SidebarFooter";
+import {useAuth0} from '@auth0/auth0-react';
 
 
 interface SidebarProps {
