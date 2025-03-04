@@ -77,8 +77,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     };
 
     const handleHelp = () => {
-        // Implement help functionality
-        console.log('Help clicked');
+        window.open('https://github.com/shaharia-lab/mcp-frontend', '_blank');
     };
 
     const handleSettings = () => {

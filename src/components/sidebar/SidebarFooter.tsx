@@ -1,10 +1,10 @@
 import React from 'react';
 import {
     ArrowPathIcon,
-    QuestionMarkCircleIcon,
     Cog6ToothIcon,
-    ArrowLeftOnRectangleIcon,
 } from "@heroicons/react/24/outline";
+import {FaGithub} from "react-icons/fa";
+import {ArrowLeftOnRectangleIcon} from "@heroicons/react/20/solid";
 import { useAuth0 } from '@auth0/auth0-react';
 
 interface SidebarFooterProps {
@@ -53,16 +53,16 @@ export const SidebarFooter: React.FC<SidebarFooterProps> = ({
                     <button
                         onClick={onRefresh}
                         className="text-gray-600 hover:text-gray-900"
-                        title="Refresh"
+                        title="Refresh Chat History"
                     >
                         <ArrowPathIcon className="w-5 h-5" />
                     </button>
                     <button
                         onClick={onHelp}
                         className="text-gray-600 hover:text-gray-900"
-                        title="Help"
+                        title="Get help & support from GitHub repository"
                     >
-                        <QuestionMarkCircleIcon className="w-5 h-5" />
+                        <FaGithub className="w-5 h-5" />
                     </button>
                     <button
                         onClick={onSettings}

@@ -145,22 +145,28 @@ function App() {
             <div className="flex flex-col h-screen">
                 <header className="bg-white shadow-sm w-full">
                     <div className="w-full px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-                        <button
-                            onClick={toggleSidebar}
-                            className="p-2 rounded-md hover:bg-gray-100 focus:outline-none"
-                        >
-                            <svg
-                                className="h-6 w-6"
-                                fill="none"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
+                        <div className="flex items-center space-x-4"> {/* Added container for toggle and app name */}
+                            <button
+                                onClick={toggleSidebar}
+                                className="p-2 rounded-md hover:bg-gray-100 focus:outline-none"
                             >
-                                <path d="M4 6h16M4 12h16M4 18h16"></path>
-                            </svg>
-                        </button>
+                                <svg
+                                    className="h-6 w-6"
+                                    fill="none"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path d="M4 6h16M4 12h16M4 18h16"></path>
+                                </svg>
+                            </button>
+
+                            <div className="flex items-center">
+                                <span className="text-xl font-semibold text-gray-800">MCP Kit</span>
+                            </div>
+                        </div>
 
                         <div className="flex items-center space-x-4">
                             <button
@@ -173,7 +179,6 @@ function App() {
                         </div>
                     </div>
                 </header>
-
 
                 <main className="flex-1 overflow-hidden">
                     {showWelcome ? (
