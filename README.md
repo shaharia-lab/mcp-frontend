@@ -50,7 +50,7 @@ Replace `<version>` with the specific version you want to use (e.g., `latest`, `
 #### Running with Docker
 
 ```shell
-docker run -p 3000:3000 -e VITE_BACKEND_API_ENDPOINT=http://localhost:8081 ghcr.io/shaharia-lab/mcp-frontend:<version>
+docker run -p 3000:3000 -e MCP_BACKEND_API_ENDPOINT=http://localhost:8081 ghcr.io/shaharia-lab/mcp-frontend:<version>
 ```
 
 #### Environment Variables
