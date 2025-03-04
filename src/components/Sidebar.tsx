@@ -1,5 +1,5 @@
 // components/Sidebar.tsx
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {ChatHistory} from "../types";
 import {fetchChatHistories} from "../api";
 import {SidebarHeader} from "./sidebar/SidebarHeader";
@@ -27,14 +27,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
     const [error, setError] = useState<string | null>(null);
     const { getAccessTokenSilently, isAuthenticated } = useAuth0();
 
-    const loadChatHistories = async () => {
+    const loadChatHistories = useCallback(async () => {
         if (!isAuthenticated) return;
 
         setIsLoading(true);
         try {
             const token = await getAccessTokenSilently();
             const response = await fetchChatHistories(token);
-            // Access the chats array from the response
             setChatHistories(response.chats || []);
             setError(null);
         } catch (err) {
@@ -44,14 +43,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [isAuthenticated, getAccessTokenSilently]);
 
 
     useEffect(() => {
         if (isAuthenticated) {
             loadChatHistories();
         }
-    }, [isAuthenticated]);
+    }, [isAuthenticated, loadChatHistories]);
 
     const getFirstMessage = (chat: ChatHistory): string => {
         if (!chat.messages || chat.messages.length === 0) {

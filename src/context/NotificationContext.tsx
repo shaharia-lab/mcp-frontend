@@ -12,6 +12,10 @@ const NotificationContext = createContext<NotificationContextType | undefined>(u
 export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [notifications, setNotifications] = useState<Notification[]>([]);
 
+    const removeNotification = useCallback((id: string) => {
+        setNotifications(prev => prev.filter(notification => notification.id !== id));
+    }, []);
+
     const addNotification = useCallback((type: NotificationType, message: string, duration = 5000) => {
         const id = Date.now().toString();
         const notification: Notification = { id, type, message, duration };
@@ -23,11 +27,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
                 removeNotification(id);
             }, duration);
         }
-    }, []);
-
-    const removeNotification = useCallback((id: string) => {
-        setNotifications(prev => prev.filter(notification => notification.id !== id));
-    }, []);
+    }, [removeNotification]);
 
     return (
         <NotificationContext.Provider value={{ notifications, addNotification, removeNotification }}>
