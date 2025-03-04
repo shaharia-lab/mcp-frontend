@@ -38,27 +38,11 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
     const [selectedProvider, setSelectedProvider] = useState<string | null>(null);
     const [selectedModelId, setSelectedModelId] = useState<string | null>(null);
     const { isAuthenticated, loginWithRedirect } = useAuth0();
-    if (!isAuthenticated) {
-        return (
-            <div className="flex flex-col items-center justify-center h-full">
-                <h2 className="text-xl mb-4">Please log in to use the chat</h2>
-                <button
-                    onClick={() => loginWithRedirect()}
-                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
-                >
-                    Log In
-                </button>
-            </div>
-        );
-    }
-
 
     const handleProviderChange = (provider: string, modelId: string) => {
         setSelectedProvider(provider);
         setSelectedModelId(modelId);
     };
-
-
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -92,6 +76,20 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
 
         loadChatHistory();
     }, [selectedChatId]);
+
+    if (!isAuthenticated) {
+        return (
+            <div className="flex flex-col items-center justify-center h-full">
+                <h2 className="text-xl mb-4">Please log in to use the chat</h2>
+                <button
+                    onClick={() => loginWithRedirect()}
+                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+                >
+                    Log In
+                </button>
+            </div>
+        );
+    }
 
     const handleMessageSubmit = async (message: string) => {
         setIsLoading(true);

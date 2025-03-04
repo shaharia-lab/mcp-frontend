@@ -1,9 +1,9 @@
-// components/LLMProvidersModal.tsx
 import React, { useEffect, useState } from 'react';
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { Provider, LLMProvidersModalProps } from '../types/llm';
+import {Provider, LLMProvidersModalProps} from '../types/llm';
 import { LLMProviderCard } from './LLMProviderCard';
-import {fetchLLMProviders} from "../api";
+import { useAuth0 } from "@auth0/auth0-react";
+import { LLMService } from "../services/LLMService";
 
 export const LLMProvidersModal: React.FC<LLMProvidersModalProps> = ({
                                                                         isOpen,
@@ -11,7 +11,7 @@ export const LLMProvidersModal: React.FC<LLMProvidersModalProps> = ({
                                                                         onSave,
                                                                         initialModelId,
                                                                     }) => {
-
+    const { getAccessTokenSilently } = useAuth0();
     const [providers, setProviders] = useState<Provider[]>([]);
     const [selectedModelId, setSelectedModelId] = useState<string | null>(initialModelId || null);
     const [isLoading, setIsLoading] = useState(false);
@@ -19,23 +19,41 @@ export const LLMProvidersModal: React.FC<LLMProvidersModalProps> = ({
 
     useEffect(() => {
         const fetchProviders = async () => {
+            if (!isOpen) return;
+
             setIsLoading(true);
             setError(null);
             try {
-                const data = await fetchLLMProviders();
-                setProviders(data.providers);
+                const token = await getAccessTokenSilently();
+                const llmService = new LLMService(token);
+
+                const response = await llmService.getLLMProviders();
+
+                if (response.error) {
+                    setError(response.error);
+                    setProviders([]);
+                    return;
+                }
+
+                if (!response.data) {
+                    setError('No LLM provider found server');
+                    setProviders([]);
+                    return;
+                }
+
+                setProviders(response.data.providers);
             } catch (err) {
-                setError('Failed to load LLM providers');
+                const errorMessage = err instanceof Error ? err.message : 'Failed to load LLM providers';
+                setError(errorMessage);
                 console.error('Error fetching providers:', err);
+                setProviders([]);
             } finally {
                 setIsLoading(false);
             }
         };
 
-        if (isOpen) {
-            fetchProviders();
-        }
-    }, [isOpen]);
+        fetchProviders();
+    }, [isOpen, getAccessTokenSilently]);
 
     const handleSave = () => {
         if (!selectedModelId) return;
@@ -49,7 +67,6 @@ export const LLMProvidersModal: React.FC<LLMProvidersModalProps> = ({
             onClose();
         }
     };
-
 
     if (!isOpen) return null;
 
@@ -90,23 +107,23 @@ export const LLMProvidersModal: React.FC<LLMProvidersModalProps> = ({
                     </div>
                 )}
 
-                <div className="mt-6 flex justify-end space-x-3 pt-4 border-t border-gray-200">
+                <div className="mt-6 flex justify-end space-x-4">
                     <button
                         onClick={onClose}
-                        className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                        className="px-4 py-2 text-gray-600 hover:text-gray-800"
                     >
                         Cancel
                     </button>
                     <button
                         onClick={handleSave}
                         disabled={!selectedModelId}
-                        className={`px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors ${
+                        className={`px-4 py-2 rounded-md ${
                             selectedModelId
-                                ? 'bg-blue-600 hover:bg-blue-700'
-                                : 'bg-blue-300 cursor-not-allowed'
+                                ? 'bg-blue-600 text-white hover:bg-blue-700'
+                                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                         }`}
                     >
-                        Confirm Selection
+                        Save
                     </button>
                 </div>
             </div>
