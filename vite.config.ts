@@ -6,9 +6,4 @@ export default defineConfig({
   css: {
     postcss: './postcss.config.cjs'
   },
-  base: '/static/',
-  build: {
-    outDir: '../cmd/static',
-    emptyOutDir: true
-  }
 })
