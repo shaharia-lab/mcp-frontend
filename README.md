@@ -12,15 +12,42 @@ Let's chat with LLM by providing additional capabilities (tools) coming from MCP
 
 ## Installation
 
+### Prerequisites
+
+- Node.js 20.x
+- NPM 7.x
+
+### Setup Environment Variables
+
 ```shell
-nvm use 20
+cp .env.example .env
+```
+
+Update the `.env` file with your own values.
+
+| env_key                     | Default                 | Required | Description                           |
+|-----------------------------|-------------------------|----------|---------------------------------------|
+| `VITE_BACKEND_API_ENDPOINT` | `http://localhost:8081` | Yes      | The base URL for the MCP backend API. |
+
+
+### Run the frontend
+
+```shell
 npm install
 npm run dev
 ```
 
+To build the frontend for production, run:
+
+```shell
+npm run build
+```
+
+For more details, please check the [Vite documentation](https://vite.dev/guide/).
+
 ## MCP-Kit Backend
 
-Feel free to checkout the main backend [here](https://github.com/shaharia-lab/mcp-kit).
+Feel free to check out the main backend [here](https://github.com/shaharia-lab/mcp-kit).
 
 ## Disclaimer
 
