@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {XMarkIcon} from "@heroicons/react/24/outline";
-import {LLMProvidersModalProps, Provider} from '../types/llm';
+import {LLMProvidersModalProps, Provider} from '../../types/llm';
 import {LLMProviderCard} from './LLMProviderCard';
 import {useAuth0} from "@auth0/auth0-react";
-import {LLMService} from "../services/LLMService";
+import {LLMService} from "../../services/LLMService.ts";
 
 export const LLMProvidersModal: React.FC<LLMProvidersModalProps> = ({
                                                                         isOpen,
