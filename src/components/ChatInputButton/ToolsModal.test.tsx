@@ -3,6 +3,7 @@ import '@testing-library/jest-dom';
 import {fetchTools} from "../../api";
 import {act} from "react";
 import {ToolsModal} from "./ToolsModal.tsx";
+import {Tool} from "../../types/tools.ts";
 
 // Mock the entire api module
 jest.mock('../../api', () => ({
@@ -28,7 +29,11 @@ jest.mock('../SearchBar.tsx', () => ({
 
 // Mock ToolItem component
 jest.mock('../ToolItem/ToolItem', () => ({
-    ToolItem: ({ tool, isSelected, onToggle }: { tool: any; isSelected: boolean; onToggle: (name: string) => void }) => (
+    ToolItem: ({ tool, isSelected, onToggle }: {
+        tool: Tool;
+        isSelected: boolean;
+        onToggle: (name: string) => void
+    }) => (
         <div
             data-testid={`tool-item-${tool.name}`}
             onClick={() => onToggle(tool.name)}
