@@ -2,26 +2,36 @@ import React, {KeyboardEvent, useState} from 'react';
 import {ToolsToggle} from './ChatInputButton/ToolsToggle.tsx';
 import {LLMProviderToggle} from "./LLMProviderToggle.tsx";
 
+interface MessageHandlerConfig {
+    streamResponse: boolean;
+    streamSettings?: {
+        chunkSize: number;
+        delayMs: number;
+    };
+}
+
 interface ChatInputProps {
-    onSubmit: (message: string) => Promise<void>;
+    onSubmit: (message: string, config: MessageHandlerConfig) => Promise<void>;
     isLoading: boolean;
     selectedTools: string[];
     onToolsChange: (tools: string[]) => void;
     selectedProvider: string | null;
     selectedModelId: string | null;
     onProviderChange: (provider: string, modelId: string) => void;
+    useStreaming?: boolean; // Add this new prop
 }
+
 
 export const ChatInput: React.FC<ChatInputProps> = ({
                                                         onSubmit,
                                                         isLoading,
                                                         selectedTools,
                                                         onToolsChange,
-                                                        selectedProvider,    // Add this
-                                                        selectedModelId,     // Add this
-                                                        onProviderChange    // Add this
+                                                        selectedProvider,
+                                                        selectedModelId,
+                                                        onProviderChange,
+                                                        useStreaming = true // Default to true if not provided
                                                     }) => {
-
     const [inputValue, setInputValue] = useState('');
 
     const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
@@ -35,7 +45,17 @@ export const ChatInput: React.FC<ChatInputProps> = ({
         e.preventDefault();
         if (!inputValue.trim() || isLoading) return;
 
-        await onSubmit(inputValue);
+        const config: MessageHandlerConfig = {
+            streamResponse: useStreaming,
+            ...(useStreaming && {
+                streamSettings: {
+                    chunkSize: 1,
+                    delayMs: 10
+                }
+            })
+        };
+
+        await onSubmit(inputValue, config);
         setInputValue('');
     };
 
@@ -47,13 +67,11 @@ export const ChatInput: React.FC<ChatInputProps> = ({
                         selectedTools={selectedTools}
                         onToolsChange={onToolsChange}
                     />
-
                     <LLMProviderToggle
                         selectedProvider={selectedProvider}
                         selectedModelId={selectedModelId}
                         onProviderChange={onProviderChange}
                     />
-
                 </div>
 
                 <textarea

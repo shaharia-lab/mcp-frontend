@@ -19,6 +19,13 @@ interface ChatContainerProps {
     selectedChatId?: string; // Add this prop
 }
 
+interface MessageHandlerConfig {
+    streamResponse: boolean;
+    streamSettings?: {
+        chunkSize: number;
+        delayMs: number;
+    };
+}
 
 export const ChatContainer: React.FC<ChatContainerProps> = ({
                                                                 modelSettings,
@@ -34,6 +41,7 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
     const [selectedModelId, setSelectedModelId] = useState<string | null>(null);
     const { isAuthenticated, loginWithRedirect } = useAuth0();
     const { getAccessTokenSilently } = useAuth0();
+    const [useStreaming] = useState(true);
 
     const handleProviderChange = (provider: string, modelId: string) => {
         setSelectedProvider(provider);
@@ -98,7 +106,10 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
         );
     }
 
-    const handleMessageSubmit = async (message: string) => {
+    const handleMessageSubmit = async (
+        message: string,
+        config: MessageHandlerConfig
+    ) => {
         setIsLoading(true);
 
         // Add user message
@@ -106,29 +117,22 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
             content: message,
             isUser: true
         };
-
         setMessages(prev => [...prev, newMessage]);
 
         try {
             const token = await getAccessTokenSilently();
             const chatService = new ChatService(token);
 
-            // Initialize assistant message
-            const assistantMessage: ClientChatMessage = {
-                content: '',
-                isUser: false
-            };
-
-            setMessages(prev => [...prev, assistantMessage]);
-
             const payload: ChatPayload = {
                 question: message,
                 selectedTools,
                 modelSettings,
-                stream_settings: {
-                    chunk_size: 1,
-                    delay_ms: 10
-                },
+                ...(config.streamResponse && config.streamSettings && {
+                    stream_settings: {
+                        chunk_size: config.streamSettings.chunkSize,
+                        delay_ms: config.streamSettings.delayMs
+                    }
+                }),
                 ...(chatUuid && { chat_uuid: chatUuid }),
                 ...(selectedProvider && selectedModelId && {
                     llmProvider: {
@@ -138,28 +142,11 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
                 })
             };
 
-            let accumulatedContent = '';
-
-            await chatService.sendStreamMessage(
-                payload,
-                (chunk) => {
-                    if (!chunk.done) {
-                        accumulatedContent += chunk.content;
-                        setMessages(prev => {
-                            const newMessages = [...prev];
-                            const lastMessage = newMessages[newMessages.length - 1];
-                            if (!lastMessage.isUser) {
-                                // Create a new message object to ensure state update
-                                newMessages[newMessages.length - 1] = {
-                                    ...lastMessage,
-                                    content: accumulatedContent
-                                };
-                            }
-                            return newMessages;
-                        });
-                    }
-                }
-            );
+            if (config.streamResponse) {
+                await handleStreamingResponse(chatService, payload);
+            } else {
+                await handleSyncResponse(chatService, payload);
+            }
         } catch (error) {
             addNotification(
                 'error',
@@ -168,6 +155,65 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
         } finally {
             setIsLoading(false);
         }
+    };
+
+    const handleStreamingResponse = async (
+        chatService: ChatService,
+        payload: ChatPayload
+    ) => {
+        // Initialize empty assistant message
+        const assistantMessage: ClientChatMessage = {
+            content: '',
+            isUser: false
+        };
+        setMessages(prev => [...prev, assistantMessage]);
+
+        let accumulatedContent = '';
+
+        await chatService.sendStreamMessage(
+            payload,
+            (chunk) => {
+                if (!chunk.done) {
+                    accumulatedContent += chunk.content;
+                    setMessages(prev => {
+                        const newMessages = [...prev];
+                        const lastMessage = newMessages[newMessages.length - 1];
+                        if (!lastMessage.isUser) {
+                            newMessages[newMessages.length - 1] = {
+                                ...lastMessage,
+                                content: accumulatedContent
+                            };
+                        }
+                        return newMessages;
+                    });
+                }
+            }
+        );
+    };
+
+    const handleSyncResponse = async (
+        chatService: ChatService,
+        payload: ChatPayload
+    ) => {
+        const data = await chatService.sendMessage(payload);
+
+        if (data.data.chat_uuid && !chatUuid) {
+            setChatUuid(data.data.chat_uuid);
+        }
+
+        setMessages(prev => [...prev, {
+            content: data.data.answer,
+            isUser: false
+        }]);
+    };
+
+    const onSubmit = async (message: string, config: MessageHandlerConfig) => {
+        handleMessageSubmit(message, {
+            streamResponse: config.streamResponse,
+            ...(config.streamResponse && config.streamSettings && {
+                streamSettings: config.streamSettings
+            })
+        });
     };
 
 
@@ -191,13 +237,14 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
                 <div ref={messagesEndRef} />
             </div>
             <ChatInput
-                onSubmit={handleMessageSubmit}
+                onSubmit={onSubmit}
                 isLoading={isLoading}
                 selectedTools={selectedTools}
                 onToolsChange={setSelectedTools}
                 selectedProvider={selectedProvider}
                 selectedModelId={selectedModelId}
                 onProviderChange={handleProviderChange}
+                useStreaming={useStreaming}
             />
 
         </div>
