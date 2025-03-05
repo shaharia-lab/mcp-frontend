@@ -1,6 +1,7 @@
 import React, {KeyboardEvent, useState} from 'react';
 import {ToolsToggle} from "../ChatInputButton/ToolsToggle.tsx";
 import {LLMProviderToggle} from "../LLMProviderToggle/LLMProviderToggle.tsx";
+import {StreamingToggle} from "../ChatInputButton/StreamingToggle.tsx";
 
 interface MessageHandlerConfig {
     streamResponse: boolean;
@@ -18,7 +19,8 @@ interface ChatInputProps {
     selectedProvider: string | null;
     selectedModelId: string | null;
     onProviderChange: (provider: string, modelId: string) => void;
-    useStreaming?: boolean; // Add this new prop
+    useStreaming?: boolean;
+    onStreamingChange: (value: boolean) => void;
 }
 
 
@@ -30,7 +32,8 @@ export const ChatInput: React.FC<ChatInputProps> = ({
                                                         selectedProvider,
                                                         selectedModelId,
                                                         onProviderChange,
-                                                        useStreaming = true // Default to true if not provided
+                                                        useStreaming = true,
+                                                        onStreamingChange,
                                                     }) => {
     const [inputValue, setInputValue] = useState('');
 
@@ -71,6 +74,10 @@ export const ChatInput: React.FC<ChatInputProps> = ({
                         selectedProvider={selectedProvider}
                         selectedModelId={selectedModelId}
                         onProviderChange={onProviderChange}
+                    />
+                    <StreamingToggle
+                        isStreaming={useStreaming}
+                        onToggle={onStreamingChange}
                     />
                 </div>
 

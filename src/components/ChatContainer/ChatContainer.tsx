@@ -20,7 +20,11 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
     const [selectedModelId, setSelectedModelId] = useState<string | null>(null);
     const { isAuthenticated, loginWithRedirect } = useAuth0();
     const { getAccessTokenSilently } = useAuth0();
-    const [useStreaming] = useState(true);
+    const [useStreaming, setUseStreaming] = useState(true);
+
+    const handleStreamingChange = (value: boolean) => {
+        setUseStreaming(value);
+    };
 
     const handleProviderChange = (provider: string, modelId: string) => {
         setSelectedProvider(provider);
@@ -186,16 +190,6 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
         }]);
     };
 
-    const onSubmit = async (message: string, config: MessageHandlerConfig) => {
-        handleMessageSubmit(message, {
-            streamResponse: config.streamResponse,
-            ...(config.streamResponse && config.streamSettings && {
-                streamSettings: config.streamSettings
-            })
-        });
-    };
-
-
     return (
         <div className="max-w-6xl mx-auto chat-container overflow-hidden flex flex-col h-full">
             <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-400">
@@ -216,7 +210,7 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
                 <div ref={messagesEndRef} />
             </div>
             <ChatInput
-                onSubmit={onSubmit}
+                onSubmit={handleMessageSubmit}
                 isLoading={isLoading}
                 selectedTools={selectedTools}
                 onToolsChange={setSelectedTools}
@@ -224,8 +218,8 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
                 selectedModelId={selectedModelId}
                 onProviderChange={handleProviderChange}
                 useStreaming={useStreaming}
+                onStreamingChange={handleStreamingChange}
             />
-
         </div>
     );
 };
