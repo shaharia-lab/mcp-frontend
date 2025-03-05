@@ -1,31 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Message} from "./Message/Message.tsx";
 import {ChatInput} from "./ChatInput.tsx";
-import {ChatPayload} from '../types/chat';
+import {ChatPayload, MessageHandlerConfig, ChatContainerProps} from '../types/chat';
 import {useNotification} from "../context/NotificationContext.tsx";
 import {useAuth0} from '@auth0/auth0-react';
 import {ApiChatMessage, ChatService, ClientChatMessage} from "../services/ChatService.ts";
-
-interface ModelSettings {
-    temperature: number;
-    maxTokens: number;
-    topP: number;
-    topK: number;
-}
-
-interface ChatContainerProps {
-    selectedTools: string[];
-    modelSettings: ModelSettings;
-    selectedChatId?: string; // Add this prop
-}
-
-interface MessageHandlerConfig {
-    streamResponse: boolean;
-    streamSettings?: {
-        chunkSize: number;
-        delayMs: number;
-    };
-}
 
 export const ChatContainer: React.FC<ChatContainerProps> = ({
                                                                 modelSettings,

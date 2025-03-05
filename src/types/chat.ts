@@ -23,3 +23,24 @@ export interface ChatPayload {
     llmProvider?: LLMProvider;
     stream_settings?: StreamSettings;
 }
+
+export interface ModelSettings {
+    temperature: number;
+    maxTokens: number;
+    topP: number;
+    topK: number;
+}
+
+export interface ChatContainerProps {
+    selectedTools: string[];
+    modelSettings: ModelSettings;
+    selectedChatId?: string; // Add this prop
+}
+
+export interface MessageHandlerConfig {
+    streamResponse: boolean;
+    streamSettings?: {
+        chunkSize: number;
+        delayMs: number;
+    };
+}
