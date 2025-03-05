@@ -4,14 +4,14 @@ import DOMPurify from 'dompurify';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github-dark.css';
 import {Sidebar} from './components/Sidebar';
-import {ModelControls} from './components/ModelControls';
-import {ChatContainer} from './components/ChatContainer';
 import {WelcomeScreen} from './components/WelcomeScreen/WelcomeScreen.tsx';
 import {Cog6ToothIcon} from "@heroicons/react/24/outline";
 import {NotificationProvider} from './context/NotificationContext';
 import {NotificationContainer} from "./components/NotificationContainer.tsx";
 import {Auth0Provider} from '@auth0/auth0-react';
 import AIIcon from "./components/AIIcon.tsx";
+import {ChatContainer} from "./components/ChatContainer/ChatContainer.tsx";
+import {ModelControls} from "./components/ModelControls/ModelControls.tsx";
 
 interface ModelSettings {
     temperature: number;
