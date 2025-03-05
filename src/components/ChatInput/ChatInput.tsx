@@ -1,6 +1,6 @@
 import React, {KeyboardEvent, useState} from 'react';
-import {ToolsToggle} from './ChatInputButton/ToolsToggle.tsx';
-import {LLMProviderToggle} from "./LLMProviderToggle.tsx";
+import {ToolsToggle} from "../ChatInputButton/ToolsToggle.tsx";
+import {LLMProviderToggle} from "../LLMProviderToggle/LLMProviderToggle.tsx";
 
 interface ChatInputProps {
     onSubmit: (message: string) => Promise<void>;

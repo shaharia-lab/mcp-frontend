@@ -1,7 +1,6 @@
-// src/components/NotificationToast.tsx
 import React from 'react';
 import {XMarkIcon} from '@heroicons/react/24/outline';
-import {Notification} from '../types/notification';
+import {Notification} from '../../types/notification';
 
 interface NotificationToastProps {
     notification: Notification;

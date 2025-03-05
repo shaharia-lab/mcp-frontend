@@ -1,10 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Message} from "./Message/Message.tsx";
-import {ChatInput} from "./ChatInput.tsx";
-import {ChatPayload} from '../types/chat';
-import {useNotification} from "../context/NotificationContext.tsx";
 import {useAuth0} from '@auth0/auth0-react';
-import {ApiChatMessage, ChatService, ClientChatMessage} from "../services/ChatService.ts";
+import {ApiChatMessage, ChatService, ClientChatMessage} from "../../services/ChatService.ts";
+import {ChatPayload} from "../../types/chat.ts";
+import {Message} from "../Message/Message.tsx";
+import {ChatInput} from "../ChatInput/ChatInput.tsx";
+import {useNotification} from "../../context/useNotification.ts";
 
 interface ModelSettings {
     temperature: number;
