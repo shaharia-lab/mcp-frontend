@@ -25,6 +25,7 @@ export const LLMProviderToggle: React.FC<LLMProviderToggleProps> = ({
         <>
             <button
                 type="button"
+                data-testid="llm-provider-toggle"
                 onClick={() => setIsModalOpen(true)}
                 className={`px-3 py-1.5 text-sm rounded-lg transition-colors duration-200 w-fit flex items-center gap-2 ${
                     selectedProvider
