@@ -101,6 +101,7 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
     const handleMessageSubmit = async (message: string) => {
         setIsLoading(true);
 
+        // Add user message
         const newMessage: ClientChatMessage = {
             content: message,
             isUser: true
@@ -112,6 +113,7 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
             const token = await getAccessTokenSilently();
             const chatService = new ChatService(token);
 
+            // Initialize assistant message
             const assistantMessage: ClientChatMessage = {
                 content: '',
                 isUser: false
@@ -124,8 +126,8 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
                 selectedTools,
                 modelSettings,
                 stream_settings: {
-                    chunk_size: 5,  // Match backend default
-                    delay_ms: 20      // Match backend default
+                    chunk_size: 1,
+                    delay_ms: 10
                 },
                 ...(chatUuid && { chat_uuid: chatUuid }),
                 ...(selectedProvider && selectedModelId && {
@@ -136,15 +138,22 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
                 })
             };
 
+            let accumulatedContent = '';
+
             await chatService.sendStreamMessage(
                 payload,
                 (chunk) => {
                     if (!chunk.done) {
+                        accumulatedContent += chunk.content;
                         setMessages(prev => {
                             const newMessages = [...prev];
                             const lastMessage = newMessages[newMessages.length - 1];
                             if (!lastMessage.isUser) {
-                                lastMessage.content += chunk.content;
+                                // Create a new message object to ensure state update
+                                newMessages[newMessages.length - 1] = {
+                                    ...lastMessage,
+                                    content: accumulatedContent
+                                };
                             }
                             return newMessages;
                         });
