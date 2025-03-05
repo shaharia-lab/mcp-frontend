@@ -112,10 +112,21 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
             const token = await getAccessTokenSilently();
             const chatService = new ChatService(token);
 
+            const assistantMessage: ClientChatMessage = {
+                content: '',
+                isUser: false
+            };
+
+            setMessages(prev => [...prev, assistantMessage]);
+
             const payload: ChatPayload = {
                 question: message,
                 selectedTools,
                 modelSettings,
+                stream_settings: {
+                    chunk_size: 5,  // Match backend default
+                    delay_ms: 20      // Match backend default
+                },
                 ...(chatUuid && { chat_uuid: chatUuid }),
                 ...(selectedProvider && selectedModelId && {
                     llmProvider: {
@@ -125,20 +136,31 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
                 })
             };
 
-            const data = await chatService.sendMessage(payload);
-
-            if (data.data.chat_uuid && !chatUuid) {
-                setChatUuid(data.data.chat_uuid);
-            }
-
-            setMessages(prev => [...prev, { content: data.data.answer, isUser: false }]);
+            await chatService.sendStreamMessage(
+                payload,
+                (chunk) => {
+                    if (!chunk.done) {
+                        setMessages(prev => {
+                            const newMessages = [...prev];
+                            const lastMessage = newMessages[newMessages.length - 1];
+                            if (!lastMessage.isUser) {
+                                lastMessage.content += chunk.content;
+                            }
+                            return newMessages;
+                        });
+                    }
+                }
+            );
         } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : "Sorry, there was an error processing your request.";
-            addNotification('error', errorMessage);
+            addNotification(
+                'error',
+                error instanceof Error ? error.message : 'Failed to send message'
+            );
         } finally {
             setIsLoading(false);
         }
     };
+
 
     return (
         <div className="max-w-6xl mx-auto chat-container overflow-hidden flex flex-col h-full">

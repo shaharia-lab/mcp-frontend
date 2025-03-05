@@ -10,10 +10,16 @@ export interface LLMProvider {
     modelId: string;
 }
 
+interface StreamSettings {
+    chunk_size: number;
+    delay_ms: number;
+}
+
 export interface ChatPayload {
     question: string;
     selectedTools: string[];
     modelSettings: ModelSettings;
     chat_uuid?: string;
     llmProvider?: LLMProvider;
+    stream_settings?: StreamSettings;
 }

@@ -51,4 +51,20 @@ export class APIClient {
             };
         }
     }
+
+    protected async fetchStream(
+        endpoint: string,
+        options: RequestInit = {}
+    ): Promise<Response> {
+        const response = await fetch(`${this.baseUrl}${endpoint}`, {
+            ...options,
+            headers: this.getHeaders(),
+        });
+
+        if (!response.ok) {
+            throw new Error(`API Error: ${response.statusText}`);
+        }
+
+        return response;
+    }
 }
