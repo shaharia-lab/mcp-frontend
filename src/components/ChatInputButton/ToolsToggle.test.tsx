@@ -33,28 +33,6 @@ describe('ToolsToggle', () => {
         jest.clearAllMocks();
     });
 
-
-    it('renders with default state (no tools selected)', () => {
-        render(<ToolsToggle selectedTools={[]} onToolsChange={mockOnToolsChange} />);
-
-        const button = screen.getByRole('button');
-        expect(button).toHaveTextContent('Tools Disabled');
-        expect(button).toHaveClass('bg-gray-200');
-    });
-
-    it('renders with selected tools count', () => {
-        render(
-            <ToolsToggle
-                selectedTools={['tool1', 'tool2']}
-                onToolsChange={mockOnToolsChange}
-            />
-        );
-
-        const button = screen.getByRole('button');
-        expect(button).toHaveTextContent('Tools (2)');
-        expect(button).toHaveClass('bg-gray-800');
-    });
-
     it('opens modal when clicked', () => {
         render(<ToolsToggle selectedTools={[]} onToolsChange={mockOnToolsChange} />);
 

@@ -1,6 +1,6 @@
 import React, {KeyboardEvent, useState} from 'react';
 import {ToolsToggle} from "../ChatInputButton/ToolsToggle.tsx";
-import {LLMProviderToggle} from "../LLMProviderToggle/LLMProviderToggle.tsx";
+import {LLMProviderToggle} from "../ChatInputButton/LLMProviderToggle.tsx";
 import {StreamingToggle} from "../ChatInputButton/StreamingToggle.tsx";
 
 interface MessageHandlerConfig {
@@ -65,7 +65,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
     return (
         <form onSubmit={handleSubmit} className="p-4 border-t border-gray-200">
             <div className="flex flex-col gap-2">
-                <div className="flex gap-2">
+                <div className="flex gap-2 items-center">
                     <ToolsToggle
                         selectedTools={selectedTools}
                         onToolsChange={onToolsChange}
