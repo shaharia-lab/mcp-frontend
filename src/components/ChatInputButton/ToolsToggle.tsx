@@ -22,14 +22,14 @@ export const ToolsToggle: React.FC<ToolsToggleButtonProps> = ({
             <button
                 type="button"
                 onClick={() => setIsModalOpen(true)}
-                className={`px-3 py-1.5 text-sm rounded-lg transition-colors duration-200 w-fit flex items-center gap-2 ${
+                title={selectedTools.length > 0 ? `Selected Tools (${selectedTools.length})` : 'Configure Tools'}
+                className={`px-2 py-1 text-sm rounded-lg transition-colors duration-200 w-fit flex items-center gap-2 ${
                     selectedTools.length > 0
                         ? 'bg-gray-800 text-white hover:bg-gray-700'
                         : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 }`}
             >
                 <WrenchScrewdriverIcon className="h-4 w-4" />
-                Tools {selectedTools.length > 0 ? `(${selectedTools.length})` : 'Disabled'}
             </button>
 
             <ToolsModal

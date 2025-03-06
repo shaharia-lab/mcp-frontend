@@ -1,24 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {useAuth0} from '@auth0/auth0-react';
+import {ChatContainerProps, ChatPayload, MessageHandlerConfig} from "../../types/chat.ts";
 import {ApiChatMessage, ChatService, ClientChatMessage} from "../../services/ChatService.ts";
-import {ChatPayload} from "../../types/chat.ts";
+import {useNotification} from "../../context/useNotification.ts";
 import {Message} from "../Message/Message.tsx";
 import {ChatInput} from "../ChatInput/ChatInput.tsx";
-import {useNotification} from "../../context/useNotification.ts";
-
-interface ModelSettings {
-    temperature: number;
-    maxTokens: number;
-    topP: number;
-    topK: number;
-}
-
-interface ChatContainerProps {
-    selectedTools: string[];
-    modelSettings: ModelSettings;
-    selectedChatId?: string; // Add this prop
-}
-
 
 export const ChatContainer: React.FC<ChatContainerProps> = ({
                                                                 modelSettings,
@@ -34,6 +20,11 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
     const [selectedModelId, setSelectedModelId] = useState<string | null>(null);
     const { isAuthenticated, loginWithRedirect } = useAuth0();
     const { getAccessTokenSilently } = useAuth0();
+    const [useStreaming, setUseStreaming] = useState(true);
+
+    const handleStreamingChange = (value: boolean) => {
+        setUseStreaming(value);
+    };
 
     const handleProviderChange = (provider: string, modelId: string) => {
         setSelectedProvider(provider);
@@ -98,14 +89,17 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
         );
     }
 
-    const handleMessageSubmit = async (message: string) => {
+    const handleMessageSubmit = async (
+        message: string,
+        config: MessageHandlerConfig
+    ) => {
         setIsLoading(true);
 
+        // Add user message
         const newMessage: ClientChatMessage = {
             content: message,
             isUser: true
         };
-
         setMessages(prev => [...prev, newMessage]);
 
         try {
@@ -116,6 +110,12 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
                 question: message,
                 selectedTools,
                 modelSettings,
+                ...(config.streamResponse && config.streamSettings && {
+                    stream_settings: {
+                        chunk_size: config.streamSettings.chunkSize,
+                        delay_ms: config.streamSettings.delayMs
+                    }
+                }),
                 ...(chatUuid && { chat_uuid: chatUuid }),
                 ...(selectedProvider && selectedModelId && {
                     llmProvider: {
@@ -125,19 +125,69 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
                 })
             };
 
-            const data = await chatService.sendMessage(payload);
-
-            if (data.data.chat_uuid && !chatUuid) {
-                setChatUuid(data.data.chat_uuid);
+            if (config.streamResponse) {
+                await handleStreamingResponse(chatService, payload);
+            } else {
+                await handleSyncResponse(chatService, payload);
             }
-
-            setMessages(prev => [...prev, { content: data.data.answer, isUser: false }]);
         } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : "Sorry, there was an error processing your request.";
-            addNotification('error', errorMessage);
+            addNotification(
+                'error',
+                error instanceof Error ? error.message : 'Failed to send message'
+            );
         } finally {
             setIsLoading(false);
         }
+    };
+
+    const handleStreamingResponse = async (
+        chatService: ChatService,
+        payload: ChatPayload
+    ) => {
+        // Initialize empty assistant message
+        const assistantMessage: ClientChatMessage = {
+            content: '',
+            isUser: false
+        };
+        setMessages(prev => [...prev, assistantMessage]);
+
+        let accumulatedContent = '';
+
+        await chatService.sendStreamMessage(
+            payload,
+            (chunk) => {
+                if (!chunk.done) {
+                    accumulatedContent += chunk.content;
+                    setMessages(prev => {
+                        const newMessages = [...prev];
+                        const lastMessage = newMessages[newMessages.length - 1];
+                        if (!lastMessage.isUser) {
+                            newMessages[newMessages.length - 1] = {
+                                ...lastMessage,
+                                content: accumulatedContent
+                            };
+                        }
+                        return newMessages;
+                    });
+                }
+            }
+        );
+    };
+
+    const handleSyncResponse = async (
+        chatService: ChatService,
+        payload: ChatPayload
+    ) => {
+        const data = await chatService.sendMessage(payload);
+
+        if (data.data.chat_uuid && !chatUuid) {
+            setChatUuid(data.data.chat_uuid);
+        }
+
+        setMessages(prev => [...prev, {
+            content: data.data.answer,
+            isUser: false
+        }]);
     };
 
     return (
@@ -167,8 +217,9 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
                 selectedProvider={selectedProvider}
                 selectedModelId={selectedModelId}
                 onProviderChange={handleProviderChange}
+                useStreaming={useStreaming}
+                onStreamingChange={handleStreamingChange}
             />
-
         </div>
     );
 };
