@@ -21,6 +21,7 @@ interface ChatInputProps {
     onProviderChange: (provider: string, modelId: string) => void;
     useStreaming?: boolean;
     onStreamingChange: (value: boolean) => void;
+    availableTools?: string[];
 }
 
 
@@ -34,6 +35,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
                                                         onProviderChange,
                                                         useStreaming = true,
                                                         onStreamingChange,
+                                                        availableTools = []
                                                     }) => {
     const [inputValue, setInputValue] = useState('');
 
@@ -66,10 +68,6 @@ export const ChatInput: React.FC<ChatInputProps> = ({
         <form onSubmit={handleSubmit} className="p-4 border-t border-gray-200">
             <div className="flex flex-col gap-2">
                 <div className="flex gap-2 items-center">
-                    <ToolsToggle
-                        selectedTools={selectedTools}
-                        onToolsChange={onToolsChange}
-                    />
                     <LLMProviderToggle
                         selectedProvider={selectedProvider}
                         selectedModelId={selectedModelId}
@@ -78,6 +76,12 @@ export const ChatInput: React.FC<ChatInputProps> = ({
                     <StreamingToggle
                         isStreaming={useStreaming}
                         onToggle={onStreamingChange}
+                    />
+                    <div className="w-4" />
+                    <ToolsToggle
+                        selectedTools={selectedTools}
+                        onToolsChange={onToolsChange}
+                        availableTools={availableTools}
                     />
                 </div>
 

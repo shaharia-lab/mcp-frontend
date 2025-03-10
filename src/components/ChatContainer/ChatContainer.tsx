@@ -5,6 +5,7 @@ import {ApiChatMessage, ChatService, ClientChatMessage} from "../../services/Cha
 import {useNotification} from "../../context/useNotification.ts";
 import {Message} from "../Message/Message.tsx";
 import {ChatInput} from "../ChatInput/ChatInput.tsx";
+import {ToolService} from "../../services/ToolService.ts";
 
 export const ChatContainer: React.FC<ChatContainerProps> = ({
                                                                 modelSettings,
@@ -21,6 +22,7 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
     const { isAuthenticated, loginWithRedirect } = useAuth0();
     const { getAccessTokenSilently } = useAuth0();
     const [useStreaming, setUseStreaming] = useState(true);
+    const [availableTools, setAvailableTools] = useState<string[]>([]);
 
     const handleStreamingChange = (value: boolean) => {
         setUseStreaming(value);
@@ -38,6 +40,40 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
     useEffect(() => {
         scrollToBottom();
     }, [messages, isLoading]);
+
+    useEffect(() => {
+        const loadTools = async () => {
+            try {
+                const token = await getAccessTokenSilently();
+                const toolService = new ToolService(token);
+                const response = await toolService.getTools();
+
+                if (response.error) {
+                    console.error('Error loading tools:', response.error);
+                    addNotification(
+                        'error',
+                        typeof response.error === 'object' && true && 'message' in response.error
+                            ? response.error
+                            : 'Failed to send message'
+                    );
+                    return;
+                }
+
+                if (response.data) {
+                    setAvailableTools(response.data.map(tool => tool.name));
+                }
+            } catch (error) {
+                console.error('Error fetching tools:', error);
+                addNotification(
+                    'error',
+                    error instanceof Error ? error.message : 'Failed to send message'
+                );
+            }
+        };
+
+        loadTools();
+    }, [getAccessTokenSilently]);
+
 
     useEffect(() => {
         const loadChatHistory = async () => {
@@ -219,6 +255,7 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
                 onProviderChange={handleProviderChange}
                 useStreaming={useStreaming}
                 onStreamingChange={handleStreamingChange}
+                availableTools={availableTools}
             />
         </div>
     );

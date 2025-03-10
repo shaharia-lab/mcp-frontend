@@ -1,15 +1,18 @@
-import React, {useState} from 'react';
-import {WrenchScrewdriverIcon} from "@heroicons/react/16/solid";
-import {ToolsModal} from "./ToolsModal.tsx";
+import React, { useState } from 'react';
+import { WrenchScrewdriverIcon } from "@heroicons/react/16/solid";
+import { ToolsModal } from "./ToolsModal.tsx";
+import { toolIconMappings } from './toolIcons';
 
 interface ToolsToggleButtonProps {
     selectedTools: string[];
     onToolsChange: (tools: string[]) => void;
+    availableTools?: string[]; // Add this prop to know all available tools
 }
 
 export const ToolsToggle: React.FC<ToolsToggleButtonProps> = ({
-                                                                  selectedTools = [], // Provide default empty array
-                                                                  onToolsChange
+                                                                  selectedTools = [],
+                                                                  onToolsChange,
+                                                                  availableTools = []
                                                               }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -17,8 +20,25 @@ export const ToolsToggle: React.FC<ToolsToggleButtonProps> = ({
         onToolsChange(tools);
     };
 
+    const handleQuickToolToggle = (pattern: string) => {
+        const relatedTools = availableTools.filter(tool =>
+            tool.toLowerCase().includes(pattern.toLowerCase())
+        );
+
+        // If all related tools are selected, unselect them; otherwise, select them
+        const allSelected = relatedTools.every(tool => selectedTools.includes(tool));
+
+        if (allSelected) {
+            onToolsChange(selectedTools.filter(tool => !relatedTools.includes(tool)));
+        } else {
+            const newTools = [...new Set([...selectedTools, ...relatedTools])];
+            onToolsChange(newTools);
+        }
+    };
+
     return (
-        <>
+        <div className="flex items-center gap-2">
+            {/* Main tools configuration button */}
             <button
                 type="button"
                 onClick={() => setIsModalOpen(true)}
@@ -38,6 +58,33 @@ export const ToolsToggle: React.FC<ToolsToggleButtonProps> = ({
                 onSave={handleSaveTools}
                 initialSelectedTools={selectedTools}
             />
-        </>
+
+            {/* Quick access tool icons */}
+            {toolIconMappings.map(({ pattern, icon: Icon, title }) => {
+                // Check if there are any available tools matching this pattern
+                const hasMatchingTools = availableTools.some(tool =>
+                    tool.toLowerCase().includes(pattern.toLowerCase())
+                );
+
+                // Only render the button if matching tools are available
+                return hasMatchingTools ? (
+                    <button
+                        key={pattern}
+                        type="button"
+                        onClick={() => handleQuickToolToggle(pattern)}
+                        title={title}
+                        className={`p-1.5 rounded-lg transition-colors duration-200 ${
+                            selectedTools.some(tool =>
+                                tool.toLowerCase().includes(pattern.toLowerCase())
+                            )
+                                ? 'bg-gray-800 text-white hover:bg-gray-700'
+                                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                        }`}
+                    >
+                        <Icon className="h-4 w-4" />
+                    </button>
+                ) : null;
+            })}
+        </div>
     );
 };
