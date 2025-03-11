@@ -71,7 +71,7 @@ export const ToolsToggle: React.FC<ToolsToggleButtonProps> = ({
             />
 
             {/* Quick access tool icons */}
-            {toolIconMappings.map(({ pattern, icon: Icon, title }) => {
+            {toolIconMappings.map(({ pattern, icon: Icon, title, colors }) => {
                 // Check if there are any available tools matching this pattern
                 const hasMatchingTools = availableTools.some(tool =>
                     tool.toLowerCase().includes(pattern.toLowerCase())
@@ -88,8 +88,8 @@ export const ToolsToggle: React.FC<ToolsToggleButtonProps> = ({
                             selectedTools.some(tool =>
                                 tool.toLowerCase().includes(pattern.toLowerCase())
                             )
-                                ? 'bg-gray-800 text-white hover:bg-gray-700'
-                                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                                ? `${colors.bg} ${colors.text} ${colors.hoverBg}`
+                                : `bg-gray-400 ${colors.text} ${colors.hoverBg}`
                         }`}
                     >
                         <Icon className="h-4 w-4" />
