@@ -21,13 +21,23 @@ export const ToolsToggle: React.FC<ToolsToggleButtonProps> = ({
     };
 
     const handleQuickToolToggle = (pattern: string) => {
-        const relatedTools = availableTools.filter(tool =>
-            tool.toLowerCase().includes(pattern.toLowerCase())
-        );
+        // Find the tool mapping for the current pattern
+        const toolMapping = toolIconMappings.find(mapping => mapping.pattern === pattern);
 
-        // If all related tools are selected, unselect them; otherwise, select them
+        const relatedTools = availableTools.filter(tool => {
+            const toolLower = tool.toLowerCase();
+
+            // Use the regex pattern from toolMapping if it exists
+            if (toolMapping?.regex) {
+                return toolMapping.regex.test(toolLower);
+            }
+
+            // Fallback to simple pattern matching if no regex is defined
+            const regex = new RegExp(`^${pattern}`, 'i');
+            return regex.test(toolLower);
+        });
+
         const allSelected = relatedTools.every(tool => selectedTools.includes(tool));
-
         if (allSelected) {
             onToolsChange(selectedTools.filter(tool => !relatedTools.includes(tool)));
         } else {
@@ -35,6 +45,7 @@ export const ToolsToggle: React.FC<ToolsToggleButtonProps> = ({
             onToolsChange(newTools);
         }
     };
+
 
     return (
         <div className="flex items-center gap-2">
