@@ -12,10 +12,6 @@ export class APIClient {
         this.token = token;
     }
 
-    setToken(token: string) {
-        this.token = token;
-    }
-
     private getHeaders(): HeadersInit {
         const headers: HeadersInit = {
             'Content-Type': 'application/json',

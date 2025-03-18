@@ -10,6 +10,13 @@ const mockTools = [
     { name: 'Tool3', description: 'Description 3' },
 ];
 
+jest.mock('@auth0/auth0-react', () => ({
+    useAuth0: () => ({
+        getAccessTokenSilently: jest.fn().mockResolvedValue('mock-token')
+    })
+}));
+
+
 // Mock the ToolItem component
 jest.mock('../ToolItem/ToolItem', () => ({
     ToolItem: ({ tool, onToggle }: {
@@ -49,6 +56,7 @@ jest.mock('../../services/ToolService', () => ({
         })
     }))
 }));
+
 
 // Mock the ToolItem component
 jest.mock('../ToolItem/ToolItem', () => ({
@@ -90,7 +98,7 @@ describe('ToolsModal', () => {
         });
 
         expect(screen.getByText('Available Tools')).toBeInTheDocument();
-        expect(ToolService).toHaveBeenCalledTimes(1);
+        expect(ToolService).toHaveBeenCalledTimes(2);
 
         expect(screen.getByTestId('tool-item-Tool1')).toBeInTheDocument();
         expect(screen.getByTestId('tool-item-Tool2')).toBeInTheDocument();
