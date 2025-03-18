@@ -18,7 +18,8 @@ This repository is part of [mcp-kit](https://github.com/shaharia-lab/mcp-kit) an
 
 Experience MCP Kit in action - chat with LLMs while leveraging additional capabilities provided by the MCP server:
 
-<video src="https://github.com/user-attachments/assets/ff760b5f-7f0c-4b94-a3ca-1b55283bddd4" controls title="MCP Kit in action"></video>
+<video src="https://github.com/user-attachments/assets/bb650e68-825c-4d5e-a032-1ea757bbb930" controls title="MCP Kit in action"></video>
+
 
 ## 🛠️ Prerequisites
 
