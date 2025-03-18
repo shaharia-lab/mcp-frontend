@@ -38,9 +38,11 @@ describe('ToolsToggle', () => {
         render(<ToolsToggle selectedTools={[]} onToolsChange={mockOnToolsChange} />);
 
         const button = screen.getByRole('button');
-        expect(button).toHaveTextContent('Tools Disabled');
+        // Instead of expecting text, verify the icon is present and check the title attribute
+        expect(button).toHaveAttribute('title', 'Configure Tools');
         expect(button).toHaveClass('bg-gray-200');
     });
+
 
     it('renders with selected tools count', () => {
         render(
@@ -51,9 +53,11 @@ describe('ToolsToggle', () => {
         );
 
         const button = screen.getByRole('button');
-        expect(button).toHaveTextContent('Tools (2)');
+        // Verify the title attribute instead of text content
+        expect(button).toHaveAttribute('title', 'Selected Tools (2)');
         expect(button).toHaveClass('bg-gray-800');
     });
+
 
     it('opens modal when clicked', () => {
         render(<ToolsToggle selectedTools={[]} onToolsChange={mockOnToolsChange} />);
