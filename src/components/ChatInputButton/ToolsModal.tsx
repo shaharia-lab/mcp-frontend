@@ -4,6 +4,7 @@ import {Tool, ToolsModalProps} from "../../types/tools.ts";
 import {SearchBar} from "../SearchBar.tsx";
 import {ToolItem} from "../ToolItem/ToolItem.tsx";
 import {ToolService} from "../../services/ToolService.ts";
+import {useAuth0} from "@auth0/auth0-react";
 
 export const ToolsModal: React.FC<ToolsModalProps> = ({
                                                           isOpen,
@@ -14,11 +15,13 @@ export const ToolsModal: React.FC<ToolsModalProps> = ({
     const [tools, setTools] = useState<Tool[]>([]);
     const [selectedTools, setSelectedTools] = useState<string[]>(initialSelectedTools);
     const [searchQuery, setSearchQuery] = useState('');
+    const { getAccessTokenSilently } = useAuth0();
 
     useEffect(() => {
         const loadTools = async () => {
             try {
-                const toolService = new ToolService();
+                const token = await getAccessTokenSilently();
+                const toolService = new ToolService(token);
                 const response = await toolService.getTools();
                 setTools(response.data || []);
             } catch (error) {
@@ -29,7 +32,7 @@ export const ToolsModal: React.FC<ToolsModalProps> = ({
         if (isOpen) {
             loadTools();
         }
-    }, [isOpen]);
+    }, [isOpen, getAccessTokenSilently]);
 
     const handleToolToggle = (toolName: string) => {
         setSelectedTools(prev =>
