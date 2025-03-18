@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useAuth0} from '@auth0/auth0-react';
 import {ChatContainerProps, ChatPayload, MessageHandlerConfig} from "../../types/chat.ts";
 import {ApiChatMessage, ChatService, ClientChatMessage} from "../../services/ChatService.ts";
@@ -23,6 +23,16 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
     const { getAccessTokenSilently } = useAuth0();
     const [useStreaming, setUseStreaming] = useState(true);
     const [availableTools, setAvailableTools] = useState<string[]>([]);
+
+    const handleError = useCallback((error: unknown) => {
+        addNotification(
+            'error',
+            error instanceof Error || (typeof error === 'object' && error && 'message' in error)
+                ? (error as { message: string }).message
+                : 'Failed to send message'
+        );
+    }, [addNotification]);
+
 
     const handleStreamingChange = (value: boolean) => {
         setUseStreaming(value);
@@ -50,16 +60,7 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
 
                 if (response.error) {
                     console.error('Error loading tools:', response.error);
-                    // Creating a local function that uses addNotification
-                    const notifyError = () => {
-                        addNotification(
-                            'error',
-                            typeof response.error === 'object' && true && 'message' in response.error
-                                ? response.error
-                                : 'Failed to send message'
-                        );
-                    };
-                    notifyError();
+                    handleError(response.error);
                     return;
                 }
 
@@ -68,14 +69,8 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
                 }
             } catch (error) {
                 console.error('Error fetching tools:', error);
-                // Creating another local function
-                const notifyError = () => {
-                    addNotification(
-                        'error',
-                        error instanceof Error ? error.message : 'Failed to send message'
-                    );
-                };
-                notifyError();
+                handleError(error);
+                return;
             }
         };
 

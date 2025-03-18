@@ -88,12 +88,6 @@ beforeAll(() => {
     Element.prototype.scrollIntoView = jest.fn();
 });
 
-afterAll(() => {
-    // Clean up
-    // @ts-ignore
-    delete window.import;
-});
-
 describe('ChatContainer', () => {
     const mockModelSettings = {
         temperature: 0.7,
