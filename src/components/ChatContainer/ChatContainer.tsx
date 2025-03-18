@@ -50,12 +50,16 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
 
                 if (response.error) {
                     console.error('Error loading tools:', response.error);
-                    addNotification(
-                        'error',
-                        typeof response.error === 'object' && true && 'message' in response.error
-                            ? response.error
-                            : 'Failed to send message'
-                    );
+                    // Creating a local function that uses addNotification
+                    const notifyError = () => {
+                        addNotification(
+                            'error',
+                            typeof response.error === 'object' && true && 'message' in response.error
+                                ? response.error
+                                : 'Failed to send message'
+                        );
+                    };
+                    notifyError();
                     return;
                 }
 
@@ -64,10 +68,14 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
                 }
             } catch (error) {
                 console.error('Error fetching tools:', error);
-                addNotification(
-                    'error',
-                    error instanceof Error ? error.message : 'Failed to send message'
-                );
+                // Creating another local function
+                const notifyError = () => {
+                    addNotification(
+                        'error',
+                        error instanceof Error ? error.message : 'Failed to send message'
+                    );
+                };
+                notifyError();
             }
         };
 
