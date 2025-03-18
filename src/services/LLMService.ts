@@ -7,6 +7,6 @@ export class LLMService extends APIClient {
     }
 
     async getLLMProviders(): Promise<APIResponse<LLMProvidersResponse>> {
-        return this.fetchWithError<LLMProvidersResponse>('/llm-providers');
+        return this.fetchWithError<LLMProvidersResponse>('/api/v1/llm-providers');
     }
 }
