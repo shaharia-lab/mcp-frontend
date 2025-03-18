@@ -25,6 +25,9 @@ interface StreamChunk {
     done?: boolean;
 }
 
+interface ChatHistoriesResponse {
+    chats: ChatHistory[];
+}
 
 // Updated ChatService
 export class ChatService extends APIClient {
@@ -32,8 +35,8 @@ export class ChatService extends APIClient {
         super(import.meta.env.VITE_MCP_BACKEND_API_ENDPOINT, token);
     }
 
-    async getChatHistories(): Promise<APIResponse<ChatHistory[]>> {
-        return this.fetchWithError<ChatHistory[]>('/chats');
+    async getChatHistories(): Promise<APIResponse<ChatHistoriesResponse>> {
+        return this.fetchWithError<ChatHistoriesResponse>('/chats');
     }
 
     async sendMessage(payload: ChatPayload): Promise<APIResponse<ChatResponse>> {

@@ -11,14 +11,6 @@ export const fetchChatHistories = async (token: string) => {
     return await response.json();
 };
 
-export const fetchLLMProviders = async () => {
-    const response = await fetch(`${import.meta.env.VITE_MCP_BACKEND_API_ENDPOINT}/llm-providers`);
-    if (!response.ok) {
-        throw new Error('Failed to fetch LLM providers');
-    }
-    return await response.json();
-};
-
 export const fetchTools = async () => {
     const response = await fetch('http://localhost:8081/api/tools');
     if (!response.ok) {
