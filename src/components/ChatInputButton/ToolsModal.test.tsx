@@ -1,53 +1,72 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import {fetchTools} from "../../api";
-import {act} from "react";
-import {ToolsModal} from "./ToolsModal.tsx";
-import {Tool} from "../../types/tools.ts";
+import { render, screen, act, fireEvent } from '@testing-library/react';
+import { ToolsModal } from './ToolsModal';
+import { ToolService } from '../../services/ToolService';
+import { Tool } from '../../types/tools';
 
-// Mock the entire api module
-jest.mock('../../api', () => ({
-    fetchTools: jest.fn()
-}));
-
-// Mock the XMarkIcon component
-jest.mock('@heroicons/react/24/outline', () => ({
-    XMarkIcon: () => <div data-testid="close-icon">X</div>
-}));
-
-// Mock SearchBar component
-jest.mock('../SearchBar.tsx', () => ({
-    SearchBar: ({ value, onChange }: { value: string; onChange: (value: string) => void }) => (
-        <input
-            data-testid="search-bar"
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            placeholder="Search tools"
-        />
-    )
-}));
-
-// Mock ToolItem component
-jest.mock('../ToolItem/ToolItem', () => ({
-    ToolItem: ({ tool, isSelected, onToggle }: {
-        tool: Tool;
-        isSelected: boolean;
-        onToggle: (name: string) => void
-    }) => (
-        <div
-            data-testid={`tool-item-${tool.name}`}
-            onClick={() => onToggle(tool.name)}
-        >
-            {tool.name} {isSelected ? '(Selected)' : ''}
-        </div>
-    )
-}));
-
+// Create mock data
 const mockTools = [
     { name: 'Tool1', description: 'Description 1' },
     { name: 'Tool2', description: 'Description 2' },
     { name: 'Tool3', description: 'Description 3' },
 ];
+
+// Mock the ToolItem component
+jest.mock('../ToolItem/ToolItem', () => ({
+    ToolItem: ({ tool, onToggle }: {
+        tool: Tool;
+        isSelected: boolean;
+        onToggle: (name: string) => void;
+    }) => (
+        <div
+            data-testid={`tool-item-${tool.name}`}
+            onClick={() => onToggle(tool.name)}
+        >
+            {tool.name}
+        </div>
+    )
+}));
+
+// Mock SearchBar component
+jest.mock('../SearchBar', () => ({
+    SearchBar: ({ value, onChange }: {
+        value: string;
+        onChange: (value: string) => void;
+    }) => (
+        <input
+            data-testid="search-bar"
+            placeholder="Search tools"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+        />
+    )
+}));
+
+// Mock the ToolService
+jest.mock('../../services/ToolService', () => ({
+    ToolService: jest.fn().mockImplementation(() => ({
+        getTools: jest.fn().mockResolvedValue({
+            data: mockTools
+        })
+    }))
+}));
+
+// Mock the ToolItem component
+jest.mock('../ToolItem/ToolItem', () => ({
+    ToolItem: ({ tool, isSelected, onToggle }: {
+        tool: Tool;
+        isSelected: boolean;
+        onToggle: (name: string) => void;
+    }) => (
+        <div
+            data-testid={`tool-item-${tool.name}`}
+            onClick={() => onToggle(tool.name)}
+        >
+            {tool.name}
+            {isSelected && ' (Selected)'}
+        </div>
+    )
+}));
+
 
 describe('ToolsModal', () => {
     const mockOnClose = jest.fn();
@@ -55,8 +74,8 @@ describe('ToolsModal', () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
-        (fetchTools as jest.Mock).mockResolvedValue(mockTools);
     });
+
 
     it('should render and fetch tools when opened', async () => {
         await act(async () => {
@@ -71,7 +90,7 @@ describe('ToolsModal', () => {
         });
 
         expect(screen.getByText('Available Tools')).toBeInTheDocument();
-        expect(fetchTools).toHaveBeenCalledTimes(1);
+        expect(ToolService).toHaveBeenCalledTimes(1);
 
         expect(screen.getByTestId('tool-item-Tool1')).toBeInTheDocument();
         expect(screen.getByTestId('tool-item-Tool2')).toBeInTheDocument();

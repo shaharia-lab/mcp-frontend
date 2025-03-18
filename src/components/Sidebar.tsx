@@ -1,12 +1,12 @@
 // components/Sidebar.tsx
 import React, {useCallback, useEffect, useState} from 'react';
 import {ChatHistory} from "../types";
-import {fetchChatHistories} from "../api";
 import {SidebarHeader} from "./sidebar/SidebarHeader";
 import {NewChatSection} from "./sidebar/NewChatSection";
 import {ChatHistoryList} from "./sidebar/ChatHistoryList";
 import {SidebarFooter} from "./sidebar/SidebarFooter";
 import {useAuth0} from '@auth0/auth0-react';
+import {ChatService} from "../services/ChatService.ts";
 
 
 interface SidebarProps {
@@ -33,8 +33,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
         setIsLoading(true);
         try {
             const token = await getAccessTokenSilently();
-            const response = await fetchChatHistories(token);
-            setChatHistories(response.chats || []);
+            const chatService = new ChatService(token);
+            const response = await chatService.getChatHistories();
+            setChatHistories(response.data.chats || []);
             setError(null);
         } catch (err) {
             setError('Failed to load chat histories');

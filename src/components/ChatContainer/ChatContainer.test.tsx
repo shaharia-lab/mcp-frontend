@@ -26,13 +26,6 @@ jest.mock('../../services/ToolService', () => ({
     }))
 }));
 
-// Mock the api module
-jest.mock('../../api', () => ({
-    fetchChatHistories: jest.fn(),
-    fetchLLMProviders: jest.fn(),
-    fetchTools: jest.fn()
-}));
-
 // Mock the auth0 hook
 jest.mock('@auth0/auth0-react');
 
@@ -93,12 +86,6 @@ beforeAll(() => {
         writable: true
     });
     Element.prototype.scrollIntoView = jest.fn();
-});
-
-afterAll(() => {
-    // Clean up
-    // @ts-ignore
-    delete window.import;
 });
 
 describe('ChatContainer', () => {

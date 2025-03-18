@@ -25,6 +25,9 @@ interface StreamChunk {
     done?: boolean;
 }
 
+interface ChatHistoriesResponse {
+    chats: ChatHistory[];
+}
 
 // Updated ChatService
 export class ChatService extends APIClient {
@@ -32,8 +35,8 @@ export class ChatService extends APIClient {
         super(import.meta.env.VITE_MCP_BACKEND_API_ENDPOINT, token);
     }
 
-    async getChatHistories(): Promise<APIResponse<ChatHistory[]>> {
-        return this.fetchWithError<ChatHistory[]>('/chats');
+    async getChatHistories(): Promise<APIResponse<ChatHistoriesResponse>> {
+        return this.fetchWithError<ChatHistoriesResponse>('/api/v1/chats');
     }
 
     async sendMessage(payload: ChatPayload): Promise<APIResponse<ChatResponse>> {
@@ -44,7 +47,7 @@ export class ChatService extends APIClient {
     }
 
     async loadChatHistory(chatId: string): Promise<APIResponse<{ messages: ApiChatMessage[] }>> {
-        return this.fetchWithError<{ messages: ApiChatMessage[] }>(`/chats/${chatId}`);
+        return this.fetchWithError<{ messages: ApiChatMessage[] }>(`/api/v1/chats/${chatId}`);
     }
 
     async sendStreamMessage(
@@ -52,7 +55,7 @@ export class ChatService extends APIClient {
         onChunk: (chunk: StreamChunk) => void
     ): Promise<void> {
         try {
-            const response = await this.fetchStream('/ask-stream', {
+            const response = await this.fetchStream('/api/v1/chats/stream', {
                 method: 'POST',
                 body: JSON.stringify(payload),
             });
