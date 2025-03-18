@@ -2,8 +2,8 @@ import {Tool} from "../types/tools.ts";
 import {APIClient, APIResponse} from "./APIClient.ts";
 
 export class ToolService extends APIClient {
-    constructor(token: string = '', baseUrl?: string) {
-        super(baseUrl || import.meta.env.VITE_MCP_BACKEND_API_ENDPOINT, token);
+    constructor(token: string = '') {
+        super('http://localhost:8081/api', token);
     }
 
     async getTools(): Promise<APIResponse<Tool[]>> {

@@ -28,8 +28,8 @@ interface StreamChunk {
 
 // Updated ChatService
 export class ChatService extends APIClient {
-    constructor(token: string = '', baseUrl?: string) {
-        super(baseUrl || import.meta.env.VITE_MCP_BACKEND_API_ENDPOINT, token);
+    constructor(token: string = '') {
+        super(import.meta.env.VITE_MCP_BACKEND_API_ENDPOINT, token);
     }
 
     async getChatHistories(): Promise<APIResponse<ChatHistory[]>> {
