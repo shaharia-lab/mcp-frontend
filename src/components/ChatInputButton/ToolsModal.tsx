@@ -2,8 +2,8 @@ import React, {useEffect, useMemo, useState} from 'react';
 import {XMarkIcon} from "@heroicons/react/24/outline";
 import {Tool, ToolsModalProps} from "../../types/tools.ts";
 import {SearchBar} from "../SearchBar.tsx";
-import {fetchTools} from "../../api";
 import {ToolItem} from "../ToolItem/ToolItem.tsx";
+import {ToolService} from "../../services/ToolService.ts";
 
 export const ToolsModal: React.FC<ToolsModalProps> = ({
                                                           isOpen,
@@ -18,8 +18,9 @@ export const ToolsModal: React.FC<ToolsModalProps> = ({
     useEffect(() => {
         const loadTools = async () => {
             try {
-                const data = await fetchTools();
-                setTools(data);
+                const toolService = new ToolService();
+                const response = await toolService.getTools();
+                setTools(response.data || []);
             } catch (error) {
                 console.error('Error fetching tools:', error);
             }
@@ -29,7 +30,6 @@ export const ToolsModal: React.FC<ToolsModalProps> = ({
             loadTools();
         }
     }, [isOpen]);
-
 
     const handleToolToggle = (toolName: string) => {
         setSelectedTools(prev =>
