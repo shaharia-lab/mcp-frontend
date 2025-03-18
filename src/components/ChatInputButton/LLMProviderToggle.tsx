@@ -16,25 +16,20 @@ export const LLMProviderToggle: React.FC<LLMProviderToggleProps> = ({
                                                                     }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const getDisplayText = () => {
-        if (!selectedProvider) return 'Select LLM Provider';
-        return `${selectedProvider} (${selectedModelId})`;
-    };
-
     return (
         <>
             <button
                 type="button"
                 data-testid="llm-provider-toggle"
                 onClick={() => setIsModalOpen(true)}
-                className={`px-3 py-1.5 text-sm rounded-lg transition-colors duration-200 w-fit flex items-center gap-2 ${
+                title={selectedProvider ? `${selectedProvider} (${selectedModelId})` : 'Select LLM Provider'}
+                className={`px-2 py-1 text-sm rounded-lg transition-colors duration-200 w-fit flex items-center gap-2 ${
                     selectedProvider
                         ? 'bg-blue-600 text-white hover:bg-blue-700'
                         : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 }`}
             >
                 <CircleStackIcon className="h-4 w-4" />
-                {getDisplayText()}
             </button>
 
             <LLMProvidersModal
