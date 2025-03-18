@@ -36,7 +36,7 @@ export class ChatService extends APIClient {
     }
 
     async getChatHistories(): Promise<APIResponse<ChatHistoriesResponse>> {
-        return this.fetchWithError<ChatHistoriesResponse>('/chats');
+        return this.fetchWithError<ChatHistoriesResponse>('/api/v1/chats');
     }
 
     async sendMessage(payload: ChatPayload): Promise<APIResponse<ChatResponse>> {
@@ -47,7 +47,7 @@ export class ChatService extends APIClient {
     }
 
     async loadChatHistory(chatId: string): Promise<APIResponse<{ messages: ApiChatMessage[] }>> {
-        return this.fetchWithError<{ messages: ApiChatMessage[] }>(`/chats/${chatId}`);
+        return this.fetchWithError<{ messages: ApiChatMessage[] }>(`/api/v1/chats/${chatId}`);
     }
 
     async sendStreamMessage(
@@ -55,7 +55,7 @@ export class ChatService extends APIClient {
         onChunk: (chunk: StreamChunk) => void
     ): Promise<void> {
         try {
-            const response = await this.fetchStream('/ask-stream', {
+            const response = await this.fetchStream('/api/v1/chats/stream', {
                 method: 'POST',
                 body: JSON.stringify(payload),
             });
