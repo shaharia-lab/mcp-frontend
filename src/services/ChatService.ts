@@ -40,7 +40,7 @@ export class ChatService extends APIClient {
     }
 
     async sendMessage(payload: ChatPayload): Promise<APIResponse<ChatResponse>> {
-        return this.fetchWithError<ChatResponse>('/ask', {
+        return this.fetchWithError<ChatResponse>('/api/v1/chats', {
             method: 'POST',
             body: JSON.stringify(payload),
         });
@@ -52,13 +52,29 @@ export class ChatService extends APIClient {
 
     async sendStreamMessage(
         payload: ChatPayload,
-        onChunk: (chunk: StreamChunk) => void
+        onChunk: (chunk: StreamChunk) => void,
+        onHeaderChatUuid?: (chatUuid: string) => void
     ): Promise<void> {
         try {
             const response = await this.fetchStream('/api/v1/chats/stream', {
                 method: 'POST',
                 body: JSON.stringify(payload),
             });
+
+            //const chatUuid = response.headers.get('X-Chat-Uuid');
+            // Debug: Log all available headers
+            console.log('All response headers:');
+            response.headers.forEach((value, name) => {
+                console.log(`${name}: ${value}`);
+            });
+
+            // Try both casing variants
+            const chatUuid = response.headers.get('X-MKit-Chat-UUID');
+
+            if (chatUuid && onHeaderChatUuid) {
+                onHeaderChatUuid(chatUuid);
+            }
+
 
             const reader = response.body?.getReader();
             if (!reader) {

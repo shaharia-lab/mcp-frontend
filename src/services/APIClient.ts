@@ -54,7 +54,11 @@ export class APIClient {
     ): Promise<Response> {
         const response = await fetch(`${this.baseUrl}${endpoint}`, {
             ...options,
-            headers: this.getHeaders(),
+            headers: {
+                ...this.getHeaders(),
+                ...options.headers
+            },
+            mode: 'cors',
         });
 
         if (!response.ok) {

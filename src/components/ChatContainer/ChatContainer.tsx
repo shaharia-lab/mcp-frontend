@@ -164,6 +164,11 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
                 })
             };
 
+            if (chatUuid) {
+                payload.chat_uuid = chatUuid;
+            }
+
+
             if (config.streamResponse) {
                 await handleStreamingResponse(chatService, payload);
             } else {
@@ -208,6 +213,11 @@ export const ChatContainer: React.FC<ChatContainerProps> = ({
                         }
                         return newMessages;
                     });
+                }
+            },
+            (headerChatUuid) => {
+                if (headerChatUuid && !chatUuid) {
+                    setChatUuid(headerChatUuid);
                 }
             }
         );
