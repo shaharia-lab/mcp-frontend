@@ -40,7 +40,7 @@ export class ChatService extends APIClient {
     }
 
     async sendMessage(payload: ChatPayload): Promise<APIResponse<ChatResponse>> {
-        return this.fetchWithError<ChatResponse>('/ask', {
+        return this.fetchWithError<ChatResponse>('/api/v1/chats', {
             method: 'POST',
             body: JSON.stringify(payload),
         });
