@@ -69,11 +69,7 @@ export class ChatService extends APIClient {
             });
 
             // Try both casing variants
-            const chatUuid = response.headers.get('X-Chat-Uuid');
-            const chatUUID = response.headers.get('x-chat-uuid'); // Try lowercase
-            console.log('Chat UUID (X-Chat-Uuid):', chatUuid);
-            console.log('Chat UUID (x-chat-uuid):', chatUUID);
-
+            const chatUuid = response.headers.get('X-MKit-Chat-UUID');
 
             if (chatUuid && onHeaderChatUuid) {
                 onHeaderChatUuid(chatUuid);
