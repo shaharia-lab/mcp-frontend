@@ -52,13 +52,33 @@ export class ChatService extends APIClient {
 
     async sendStreamMessage(
         payload: ChatPayload,
-        onChunk: (chunk: StreamChunk) => void
+        onChunk: (chunk: StreamChunk) => void,
+        onHeaderChatUuid?: (chatUuid: string) => void
     ): Promise<void> {
         try {
             const response = await this.fetchStream('/api/v1/chats/stream', {
                 method: 'POST',
                 body: JSON.stringify(payload),
             });
+
+            //const chatUuid = response.headers.get('X-Chat-Uuid');
+            // Debug: Log all available headers
+            console.log('All response headers:');
+            response.headers.forEach((value, name) => {
+                console.log(`${name}: ${value}`);
+            });
+
+            // Try both casing variants
+            const chatUuid = response.headers.get('X-Chat-Uuid');
+            const chatUUID = response.headers.get('x-chat-uuid'); // Try lowercase
+            console.log('Chat UUID (X-Chat-Uuid):', chatUuid);
+            console.log('Chat UUID (x-chat-uuid):', chatUUID);
+
+
+            if (chatUuid && onHeaderChatUuid) {
+                onHeaderChatUuid(chatUuid);
+            }
+
 
             const reader = response.body?.getReader();
             if (!reader) {
