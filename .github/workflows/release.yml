@@ -38,3 +38,22 @@ jobs:
           asset_path: ./dist.zip
           asset_name: dist.zip
           asset_content_type: application/zip
+
+      - name: Send Discord notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@master
+        with:
+          args: |
+            🚀 **New Release Available!** 🚀
+            
+            Repository: **${{ github.repository }}**
+            Version: **${{ github.event.release.tag_name }}**
+            
+            ${{ github.event.release.name }}
+            
+            ${{ github.event.release.body }}
+            
+            📥 [View Release Details](${{ github.event.release.html_url }})
+            
+            Thank you for using our project! ✨
