@@ -31,7 +31,7 @@ jobs:
         with:
           name: coverage
           path: coverage/
-          retention-days: 7
+          retention-days: 1
 
   lint:
     name: lint
