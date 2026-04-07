@@ -1,0 +1,24 @@
+{
+  "providers": [
+    {
+      "name": "Anthropic",
+      "models": [
+        {
+          "name": "Claude 2.0",
+          "description": "Advanced language model optimized for reliability and thoughtful responses",
+          "modelId": "claude-2.0"
+        }
+      ]
+    },
+    {
+      "name": "OpenAI",
+      "models": [
+        {
+          "name": "GPT-4o Latest",
+          "description": "Latest GPT-4o model",
+          "modelId": "chatgpt-4o-latest"
+        }
+      ]
+    }
+  ]
+}
